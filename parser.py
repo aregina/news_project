@@ -1,4 +1,5 @@
-import os , django
+import os, django
+
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "news_project.settings")
 django.setup()
 
@@ -13,11 +14,11 @@ for rss in RssChannels.objects.iterator():
     for news in parser['items']:
         if not News.objects.filter(url=news['link'])[:1]:
             new = News(site=rss.site,
-                     title=news['title'],
-                     url=news['link'],
-                     pub_date=dt.fromtimestamp(mktime(news['published_parsed'])),
-                     summary=news.get('summary', None))
+                       title=news['title'],
+                       url=news['link'],
+                       pub_date=dt.fromtimestamp(mktime(news['published_parsed'])),
+                       summary=news.get('summary', None))
             new.save()
             n += 1
     if n:
-        print("[{}] {} news add from {}".format(dt.now(),n,parser['feed'].title))
+        print("[{}] {} news add from {}".format(dt.now(), n, parser['feed'].title))

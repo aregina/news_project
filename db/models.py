@@ -2,7 +2,7 @@ from django.db import models
 
 
 class Site(models.Model):
-    site_name = models.CharField(max_length=100)
+    name = models.CharField(max_length=100)
 
 
 class News(models.Model):
