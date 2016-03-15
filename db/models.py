@@ -16,3 +16,12 @@ class News(models.Model):
 class RssChannels(models.Model):
     site = models.ForeignKey(Site, on_delete=models.CASCADE)
     url = models.URLField(max_length=300)
+
+
+class NewsText(models.Model):
+    news = models.OneToOneField(
+        News,
+        on_delete=models.CASCADE,
+        primary_key=True,
+    )
+    text = models.TextField()
