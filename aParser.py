@@ -20,7 +20,7 @@ def a_gen(text):
     while end < len(text):
         y = re.search("<a(.|\s)*?</a>", text[end:])
         if not y:
-            break
+            return
         else:
             yield y.group()
             end += y.end()
