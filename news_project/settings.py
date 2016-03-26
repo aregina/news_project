@@ -29,7 +29,7 @@ ALLOWED_HOSTS = []
 
 
 # Application definition
-
+primary_key=True,
 INSTALLED_APPS = [
     'db.apps.DbConfig',
     'django.contrib.admin',

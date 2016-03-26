@@ -25,3 +25,9 @@ class NewsText(models.Model):
         primary_key=True,
     )
     text = models.TextField()
+
+
+class KeyWord(models.Model):
+    news = models.ManyToManyField(
+            News)
+    word = models.CharField(max_length=300)
