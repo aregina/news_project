@@ -26,7 +26,7 @@ def a_print(text):
     """
     import urllib.parse as pr
 
-    text = text[re.search("</\s*?(head|HEAD)\s*?>", text).end():]
+    text = textParser.tags_filter_head_and_script(text)
 
     for link in a_gen(text):
         f = re.search("href=\"(.*?)\"", link)

@@ -3,13 +3,17 @@ import re
 
 
 def tags_filter_head_and_script(txt):
-    text = txt[re.search("</\s*?head\s*?>", txt).end():]
+    # срезаем  head и инорируем регистр
+    head_match = re.search("</\s*?head\s*?>", txt, re.IGNORECASE)
+
+    text = txt[head_match.end():]
     tag = "script"
     return re.sub("<\s*?{0}.*?>(.|\s)*?</\s*?{0}\s*?>".format(tag), " ", text)
 
 
 def tags_filter(txt):
     t = tags_filter_head_and_script(txt)
+    # должна быть независима от регистра
     tags = ["header", "svg", "noscript", "form",
             "nav", "iframe", "footer", "time", "noindex", "style", "abbr", "select", "aside", "figure"]
     for tag in tags:
