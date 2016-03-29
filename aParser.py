@@ -37,7 +37,7 @@ def a_print(text):
             print(url[:10])
 
         if url.startswith('/'):
-            url = pr.urljoin(test_url,url[1:])
+            url = pr.urljoin(test_url, url[1:])
 
         words = re.sub("<(.|\s)*?>", " ", link).split()
         len_w = len(words)
