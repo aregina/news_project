@@ -46,7 +46,6 @@ def a_print(text):
 
 
 test_url = "http://www.e1.ru/"
-
-txt = urlOpen.read(test_url)
+txt = urlOpen.get_html(test_url)
 txt = html.unescape(txt)
 a_print(txt)

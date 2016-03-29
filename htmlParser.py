@@ -8,7 +8,7 @@ from db.models import News, NewsText
 from prjparser import textParser, urlOpen
 
 for news in News.objects.iterator():
-    txt = urlOpen.read(news.url)
+    txt = urlOpen.get_html(news.url)
     if txt:
         text = textParser.get_text_from_html(txt)
         news_text = NewsText(news=news, text=text)

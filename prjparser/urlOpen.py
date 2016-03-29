@@ -1,7 +1,7 @@
 import urllib.request as u
 
 
-def read(url):
+def get_html(url):
     with u.urlopen(url) as a:
         txt = a.read()
         if a.getheader('Content-Encoding') == 'gzip':
