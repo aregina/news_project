@@ -9,7 +9,7 @@ import html
 import re
 
 
-def a_gen(text):
+def get_a(text):
     end = 0
     while end < len(text):
         y = re.search("<a(.|\s)*?</a>", text[end:])
@@ -20,32 +20,36 @@ def a_gen(text):
             end += y.end()
 
 
-def a_print(text):
+def get_url_or_none(a_tag):
+    import urllib.parse
+    href = re.search("href=\"(.*?)\"", a_tag)
+    if not href:
+        return
+    url = href.group(1)
+    if url.startswith('/'):
+        url = urllib.parse.urljoin(test_url, url[1:])
+    if url.startswith("http"):
+        return url
+
+
+def get_url_and_url_text(html_code):
     """TODO: looks like textParser.S
-    :param text:
+    :param html_code:
     """
-    import urllib.parse as pr
-
-    text = textParser.tags_filter_head_and_script(text)
-
-    for link in a_gen(text):
-        f = re.search("href=\"(.*?)\"", link)
-        if not f:
+    for a in get_a(html_code):
+        url = get_url_or_none(a)
+        if not url:
             continue
-        url = f.group(1)
-        if not url.startswith("http"):
-            print(url[:10])
 
-        if url.startswith('/'):
-            url = pr.urljoin(test_url, url[1:])
-
-        words = re.sub("<(.|\s)*?>", " ", link).split()
+        words = re.sub("<(.|\s)*?>", " ", a).split()
         len_w = len(words)
-        if len_w > 0:
-            print("{} {} {}\n".format(url, " ".join(words), len_w))
+        if len_w > 4:
+            yield url, " ".join(words)
 
 
-test_url = "http://www.e1.ru/"
+test_url = "http://www.slon.ru/news"
 txt = urlOpen.get_html(test_url)
 txt = html.unescape(txt)
-a_print(txt)
+txt = textParser.tags_filter_head_and_script(txt)
+for url, text in get_url_and_url_text(txt):
+    print("{} {}\n".format(url, text))

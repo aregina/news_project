@@ -147,8 +147,10 @@ def get_text_from_html(text):
 
 
 def main():
-    with open("html.txt", mode='r', encoding='utf-8') as file:
-        text = file.read()
+
+    import prjparser.urlOpen
+
+    text = prjparser.urlOpen.get_html("http://www.rbc.ru/rbcfreenews/56fa69a59a794782058d9c2b")
     text = tags_filter(text)
 
     with open("parsed3.txt", mode='w', encoding='utf-8') as file:

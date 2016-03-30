@@ -2,18 +2,18 @@ import urllib.request as u
 
 
 def get_html(url):
-    with u.urlopen(url) as a:
-        txt = a.read()
-        if a.getheader('Content-Encoding') == 'gzip':
+    with u.urlopen(url) as request:
+        html_code = request.read()
+        if request.getheader('Content-Encoding') == 'gzip':
             import gzip
-            txt = gzip.decompress(txt)
+            html_code = gzip.decompress(html_code)
 
     encodings = ["utf8", "cp1251"]
     for encode in encodings:
         try:
-            txt = txt.decode(encoding=encode)
+            html_code = html_code.decode(encoding=encode)
         except UnicodeDecodeError:
             print("error")
             continue
         else:
-            return txt
+            return html_code
