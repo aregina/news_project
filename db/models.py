@@ -8,7 +8,7 @@ class Site(models.Model):
 class News(models.Model):
     site = models.ForeignKey(Site, on_delete=models.CASCADE)
     title = models.CharField(max_length=300)
-    url = models.URLField(max_length=300)
+    url = models.URLField(max_length=300, db_index=True)
     pub_date = models.DateTimeField('date published')
     summary = models.TextField(blank=True, null=True)
 

@@ -3,10 +3,10 @@ import re
 
 
 def tags_filter_head_and_script(txt):
-    # срезаем  head и инорируем регистр
+    # срезаем  head инорируя регистр(на некоторых сайтах HEAD)
     head_match = re.search("</\s*?head\s*?>", txt, re.IGNORECASE)
-
     text = txt[head_match.end():]
+    text = html.unescape(text)
     tag = "script"
     return re.sub("<\s*?{0}.*?>(.|\s)*?</\s*?{0}\s*?>".format(tag), " ", text)
 
@@ -107,7 +107,6 @@ def S(text):
 
 def get_text_from_html(text):
 
-    text = html.unescape(text)
     text = tags_filter(text)
     text = S(text)
     max_char, min_char, line_list = get_list_of_lines(text)
@@ -150,7 +149,7 @@ def main():
 
     import prjparser.urlOpen
 
-    text = prjparser.urlOpen.get_html("http://www.rbc.ru/rbcfreenews/56fa69a59a794782058d9c2b")
+    text = prjparser.urlOpen.get_html("http://ria.ru/world/20160330/1400076815.html")
     text = tags_filter(text)
 
     with open("parsed3.txt", mode='w', encoding='utf-8') as file:
@@ -162,7 +161,9 @@ def main():
         if c[0] >= level and not c[2].startswith("Copyright"):
             print(i, c[0], c[1], c[2])
 
-    print(max_char, min_char)
+    print("Max chars in line: {}\n"
+          "Min chars in line {}\n"
+          "Num of lines {}".format(max_char, min_char, len(line_list)))
 
 
 if __name__ == "__main__":

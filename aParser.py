@@ -1,12 +1,11 @@
+from prjparser import urlOpen, textParser
+import re
+
 import django
 import os
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "news_project.settings")
 django.setup()
-
-from prjparser import urlOpen, textParser
-import html
-import re
 
 
 def get_a(text):
@@ -47,9 +46,8 @@ def get_url_and_url_text(html_code):
             yield url, " ".join(words)
 
 
-test_url = "http://www.slon.ru/news"
+test_url = "http://ria.ru/"
 txt = urlOpen.get_html(test_url)
-txt = html.unescape(txt)
 txt = textParser.tags_filter_head_and_script(txt)
 for url, text in get_url_and_url_text(txt):
     print("{} {}\n".format(url, text))
