@@ -1,5 +1,4 @@
 import pandas as pd
-import numpy as np
 from sklearn.linear_model import LogisticRegression
 from sklearn.feature_extraction.text import TfidfVectorizer
 import re
@@ -10,7 +9,7 @@ for_mark = 30
 name_of_column = 'text'  # имя колонки с новостью
 
 # Читаю размеченную часть csv
-Text = pd.read_csv('d.csv').ix[:marked + for_mark, 0:6]
+Text = pd.read_csv('teacher.csv').ix[:marked + for_mark, 0:6]
 
 # приведу все новости к нижнему регистру
 Text[name_of_column] = Text[name_of_column].apply(lambda x: re.sub('[^а-яА-Я]', ' ', x.lower()))
