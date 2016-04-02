@@ -1,12 +1,6 @@
 from prjparser import urlOpen, textParser
 import re
 
-import django
-import os
-
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "news_project.settings")
-django.setup()
-
 
 def get_a(text):
     end = 0
@@ -20,24 +14,30 @@ def get_a(text):
 
 
 def get_url_or_none(a_tag):
-    import urllib.parse
+
     href = re.search("href=\"(.*?)\"", a_tag)
     if not href:
         return
-    url = href.group(1)
-    if url.startswith('/'):
-        url = urllib.parse.urljoin(test_url, url[1:])
-    if url.startswith("http"):
-        return url
+    return href.group(1)
+
+    # urlparse = urllib.parse.urlparse(url)
+    # scheme, netloc, path = urlparse[0:3]
+    # url = "{}//{}{}".format(scheme, netloc, path)
 
 
-def get_url_and_url_text(html_code):
+def get_url_and_url_text(html_code, site_address):
     """TODO: looks like textParser.S
+    :param site_address:
     :param html_code:
     """
+    import urllib.parse
     for a in get_a(html_code):
         url = get_url_or_none(a)
         if not url:
+            continue
+        if url.startswith('/'):
+            url = urllib.parse.urljoin(site_address, url[1:])
+        if not url.startswith("http"):
             continue
 
         words = re.sub("<(.|\s)*?>", " ", a).split()
@@ -46,8 +46,14 @@ def get_url_and_url_text(html_code):
             yield url, " ".join(words)
 
 
-test_url = "http://ria.ru/"
-txt = urlOpen.get_html(test_url)
-txt = textParser.tags_filter_head_and_script(txt)
-for url, text in get_url_and_url_text(txt):
-    print("{} {}\n".format(url, text))
+def main():
+    test_url = "http://gazeta.ru/"
+    txt = urlOpen.get_html(test_url)
+    txt = textParser.tags_filter_head_and_script(txt)
+    for url, text in get_url_and_url_text(txt):
+        if url.startswith(test_url):
+            print("{} {}\n".format(url, text))
+
+
+if __name__ == "__main__":
+    main()
