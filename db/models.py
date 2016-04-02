@@ -31,3 +31,8 @@ class KeyWord(models.Model):
     news = models.ManyToManyField(
             News)
     word = models.CharField(max_length=300)
+
+class NewsTags(models.Model):
+    news = models.ManyToManyField(
+            News)
+    tags = models.CharField(max_length=40)
