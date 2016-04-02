@@ -13,7 +13,7 @@ def get_key_word(news, news_title):
     words_from_title = news_title.split()
 
     #interesting_speach_parts = ['NOUN', 'ADJF', 'ADJS', 'VERB', 'NUMR', 'ADVB']
-    interesting_speech_parts = ['NOUN', 'NUMR']
+    interesting_speech_parts = ['NOUN', 'NUMR', 'ADJF', 'ADJS', 'VERB']
     interesting_words_from_news = []
     for speech_parts in interesting_speech_parts:
         for word in words_from_news:
@@ -30,16 +30,16 @@ def get_key_word(news, news_title):
                 interesting_words_from_title.append(parsed_word.normal_form)
 
     #print(interesting_words_from_title)
-    counted_words = Counter(interesting_words_from_news)
+    all_intersting_words = interesting_words_from_news + interesting_words_from_title
+    counted_words = Counter(all_intersting_words)
 
     for word in interesting_words_from_title:
         if word in counted_words:
             counted_words[word] *= 3
 
-    all_words = counted_words.most_common(10)
-
     key_words = []
-    for word in all_words:
-        key_words.append(word[0])
+    for word in counted_words:
+        if counted_words[word] > 1:
+            key_words.append(word)
 
-    return (key_words)
+    return(key_words)
