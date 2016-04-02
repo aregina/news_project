@@ -25,3 +25,8 @@ class NewsText(models.Model):
         primary_key=True,
     )
     text = models.TextField()
+
+
+class ASources(models.Model):
+    site = models.ForeignKey(Site, on_delete=models.CASCADE)
+    url = models.URLField(max_length=300)
