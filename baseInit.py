@@ -14,12 +14,16 @@ news_dict = {"lenta.ru": ["http://www.lenta.ru/rss", ], "tass.ru": ["http://tass
                         "http://ria.ru/export/rss2/politics/index.xml"],
              "meduza.io": ["https://meduza.io/rss/all"], }
 
-for site_name in news_dict.keys():
-    if not Site.objects.filter(name=site_name).exists():
-        s = Site(name=site_name)
-        s.save()
+
+def get_site(name):
+    site = Site.objects.filter(name=name)[:1]
+    if not site.exists():
+        return Site.objects.create(name=name)
     else:
-        s = Site.objects.filter(name=site_name)[:1][0]
+        return site[0]
+
+for site_name in news_dict.keys():
+    s = get_site(site_name)
     for rss in news_dict[site_name]:
         if not RssChannels.objects.filter(url=rss).exists():
             r = RssChannels(site=s, url=rss)
@@ -29,11 +33,7 @@ link_dict = {'lenta.ru': "http://lenta.ru/",
              "rbc.ru": "http://www.rbc.ru/"}
 
 for site_name in link_dict.keys():
-    if not Site.objects.filter(name=site_name).exists():
-        s = Site(name=site_name)
-        s.save()
-    else:
-        s = Site.objects.filter(name=site_name)[:1][0]
+    s = get_site(site_name)
     link = link_dict[site_name]
     if not ASources.objects.filter(url=link).exists():
         ASources.objects.create(site=s, url=link)
