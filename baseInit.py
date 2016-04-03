@@ -5,14 +5,17 @@ django.setup()
 
 from db.models import Site, RssChannels, ASources
 
-news_dict = {"lenta.ru": ["http://www.lenta.ru/rss", ], "tass.ru": ["http://tass.ru/rss/v2.xml"],
+# TODO выделить в отдельный файл м.б. json
+news_dict = {"lenta.ru": ["http://www.lenta.ru/rss", ],
+             "tass.ru": ["http://tass.ru/rss/v2.xml"],
              "rbc.ru": ["http://static.feed.rbc.ru/rbc/internal/rss.rbc.ru/rbc.ru/mainnews.rss"],
              "interfax.ru": ["http://www.interfax.ru/rss.asp"],
-             "regnum.ru": ["http://regnum.ru/rss/main"], "newsru.com": ["http://feeds.newsru.com/com/www/news/main"],
+             "regnum.ru": ["http://regnum.ru/rss/main"],
+             "newsru.com": ["http://feeds.newsru.com/com/www/news/main"],
              "rosbalt.ru": ["http://www.rosbalt.ru/feed/"],
              "ria.ru": ["http://ria.ru/export/rss2/economy/index.xml", "http://ria.ru/export/rss2/world/index.xml",
                         "http://ria.ru/export/rss2/politics/index.xml"],
-             "meduza.io": ["https://meduza.io/rss/all"],}
+             "meduza.io": ["https://meduza.io/rss/all"], }
 
 link_dict = {'lenta.ru': "http://lenta.ru/",
              "rbc.ru": "http://www.rbc.ru/"}
@@ -49,6 +52,7 @@ def make_database_entry(source_dict, entry_type):
             raise TypeError
 
 
+# TODO не разделять на два странных метода
 def main():
     make_database_entry(news_dict, "rss")
     make_database_entry(link_dict, "a")
