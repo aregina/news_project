@@ -21,6 +21,6 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^$', db.views.index, name='index'),
     url(r'^tags/$', db.views.tags, name='tags'),
-    url(r'^tags/(?P<tag>\w+)/$', db.views.tag_detail, name='tag_detail'),
+    url(r'^tags/(?P<tag>(\w|\+)+)/$', db.views.tag_detail, name='tag_detail'),
     url(r'^news/id(?P<news_id>[0-9]+)/$', db.views.news_detail, name='tag_detail'),
 ]

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        p {
+            text-align:center;
+        }
+        a {
+            text-decoration: none;
+            color:black;
+        }
+        a:hover {
+            color:#484959;
+        }
+
+    </style>
+</head>
+<body>
+<h1>
+{% for key in key_list %}
+_ {{ key }} _
+    {% endfor %}
+</h1>
+<ul>
+{% for news in news_list.all %}
+    <li><a href="/news/id{{ news.id }}">{{ news.site.name}} - {{ news.title }} </a> </li>
+{% endfor %}
+</ul>
+</body>
+</html>
