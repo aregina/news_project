@@ -14,7 +14,8 @@ for rss in RssChannels.objects.iterator():
     parser = feedparser.parse(rss.url)
     n = 0
     for news in parser['items']:
-        if not News.objects.filter(url=news['link']).exists():
+        url = aParser.remove_query_from_url(news['link'])
+        if not News.objects.filter(url=url)[:1].exists():
             News.objects.create(site=rss.site,
                                 title=news['title'],
                                 url=news['link'],
@@ -29,7 +30,7 @@ for link in ASources.objects.iterator():
     html_code = textParser.tags_filter_head_and_script(html_code)
     for url, text in aParser.get_url_and_url_text(html_code, link.url):
         if url.startswith(link.url):
-            if not News.objects.filter(url=url).exists():
+            if not News.objects.filter(url=url)[:1].exists():
                 News.objects.create(site=link.site,
                                     title=text,
                                     url=url,
