@@ -9,6 +9,7 @@ from prjparser import key_words
 
 def key_words_create():
     for news in News.objects.iterator():
+        if news.keyword_set.exists(): continue
         key_word_list = key_words.get_key_word(news.newstext.text, news.title)
         print(key_word_list)
         for word in key_word_list:

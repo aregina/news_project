@@ -8,8 +8,8 @@ from db.models import News, NewsText
 from prjparser import textParser, urlOpen
 
 for news in News.objects.iterator():
+    if hasattr(news, 'newstext'): continue
     html = urlOpen.get_html(news.url)
     if html:
         text = textParser.get_text_from_html(html)
         NewsText.objects.create(news=news, text=text)
-
