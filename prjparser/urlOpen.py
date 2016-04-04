@@ -13,7 +13,6 @@ def get_html(url):
         try:
             html_code = html_code.decode(encoding=encode)
         except UnicodeDecodeError:
-            print("error")
             continue
         else:
             return html_code
