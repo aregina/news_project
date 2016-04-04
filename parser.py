@@ -1,4 +1,5 @@
-import os, django
+import django
+import os
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "news_project.settings")
 django.setup()
@@ -26,7 +27,7 @@ for rss in RssChannels.objects.iterator():
 for link in ASources.objects.iterator():
     html_code = urlOpen.get_html(link.url)
     html_code = textParser.tags_filter_head_and_script(html_code)
-    for url, text in aParser.get_url_and_url_text(html_code,link.url):
+    for url, text in aParser.get_url_and_url_text(html_code, link.url):
         if url.startswith(link.url):
             if not News.objects.filter(url=url).exists():
                 News.objects.create(site=link.site,

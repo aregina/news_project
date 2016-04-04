@@ -152,7 +152,7 @@ def main():
     text = prjparser.urlOpen.get_html("http://ria.ru/world/20160330/1400076815.html")
     text = tags_filter(text)
 
-    with open("parsed3.txt", mode='w', encoding='utf-8') as file:
+    with open("parsed3.html", mode='w', encoding='utf-8') as file:
         file.write(text)
     max_char, min_char, line_list = get_list_of_lines(text)
 
