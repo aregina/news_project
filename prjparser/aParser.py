@@ -1,5 +1,6 @@
 from prjparser import urlOpen, textParser
 import re
+import urllib.parse
 
 
 def get_a(text):
@@ -14,15 +15,17 @@ def get_a(text):
 
 
 def get_url_or_none(a_tag):
-
     href = re.search("href=\"(.*?)\"", a_tag)
     if not href:
         return
     return href.group(1)
 
-    # urlparse = urllib.parse.urlparse(url)
-    # scheme, netloc, path = urlparse[0:3]
-    # url = "{}//{}{}".format(scheme, netloc, path)
+
+def remove_query_from_url(url):
+    urlparse = urllib.parse.urlparse(url)
+    scheme, netloc, path = urlparse[0:3]
+    url = "{}://{}{}".format(scheme, netloc, path)
+    return url
 
 
 def get_url_and_url_text(html_code, site_address):
@@ -30,7 +33,7 @@ def get_url_and_url_text(html_code, site_address):
     :param site_address:
     :param html_code:
     """
-    import urllib.parse
+
     for a in get_a(html_code):
         url = get_url_or_none(a)
         if not url:
@@ -39,6 +42,8 @@ def get_url_and_url_text(html_code, site_address):
             url = urllib.parse.urljoin(site_address, url[1:])
         if not url.startswith("http"):
             continue
+
+        url = remove_query_from_url(url)
 
         words = re.sub("<(.|\s)*?>", " ", a).split()
         len_w = len(words)
@@ -50,7 +55,7 @@ def main():
     test_url = "http://gazeta.ru/"
     txt = urlOpen.get_html(test_url)
     txt = textParser.tags_filter_head_and_script(txt)
-    for url, text in get_url_and_url_text(txt):
+    for url, text in get_url_and_url_text(txt, test_url):
         if url.startswith(test_url):
             print("{} {}\n".format(url, text))
 
