@@ -1,6 +1,6 @@
-from django.shortcuts import render,get_object_or_404
+from django.shortcuts import render, get_object_or_404
 from db.models import *
-from django.db.models import Count , Max, Min, F, DecimalField,ExpressionWrapper
+from django.db.models import Count, Max, Min, F, DecimalField, ExpressionWrapper
 
 MAX_RETURN = 5
 MIN_RETURN = 1
@@ -17,9 +17,10 @@ def index(request):
 
 
 def tags(request, daily=False):
-    key_query = KeyWord.objects.annotate(cnt=Count('news')).filter(cnt__gt=20)
+    key_query = KeyWord.objects
     if daily:
-        key_query=key_query.filter(news__pub_date__day=3)
+        key_query = key_query.filter(news__pub_date__day=3)
+    key_query = key_query.annotate(cnt=Count('news')).filter(cnt__gt=20)
     key_range = key_query.aggregate(max=Max('cnt'), min=Min('cnt'))
     context = {"key": key_query.annotate(cnt_n=ExpressionWrapper(
         trivial_abs(F('cnt'), key_range['max'], key_range['min']), output_field=DecimalField(decimal_places=1)))}
