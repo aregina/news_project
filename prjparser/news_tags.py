@@ -4,39 +4,42 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 import re
 import pickle
 
-# Initial data 
-marked = 505
-for_mark = 30
-name_of_column = 'text'  # column with news
-Text = pd.read_csv('teacher.csv').ix[:marked + for_mark, 0:6]
 
-# clean text
-Text[name_of_column] = Text[name_of_column].apply(lambda x: re.sub('[^а-яА-Я]', ' ', x.lower()))
+def teach():
+    # Initial data
+    marked = 505
+    name_of_column = 'text'  # column with news
+    text = pd.read_csv('teacher.csv').ix[:marked, 0:6]
 
-# tf-idf
-Text_train = Text.ix[:marked, name_of_column]
-tf = TfidfVectorizer(ngram_range=(1, 1))
-X = tf.fit_transform(Text_train)
+    # clean text
+    text[name_of_column] = text[name_of_column].apply(lambda x: re.sub('[^а-яА-Я]', ' ', x.lower()))
 
-# tags
-y = Text.ix[:marked, 'tag']
-y = y.fillna('No tag')
+    # tf-idf
+    text_train = text.ix[:, name_of_column]
+    tf = TfidfVectorizer(ngram_range=(1, 1))
+    train = tf.fit_transform(text_train)
+    # tags
+    y = text.ix[:, 'tag']
+    y = y.fillna('No tag')
 
-LR = LogisticRegression(penalty='l2', C=100)
-LR.fit(X, y)
-save_LR = pickle.dumps(LR) # save trained algo
+    lr = LogisticRegression(penalty='l2', C=100)
+    lr.fit(train, y)
+    save_lr = pickle.dumps(lr)  # save trained algo
+    return save_lr
 
+teach()
 
 def get_tags(news):
-	news_vectorized = tf.transform(news)
-	LR_res = pickle.loads(save_LR)
+    tf = TfidfVectorizer(ngram_range=(1, 1))
+    news_vectorized = tf.transform(news)
+    lr_res = pickle.loads(teach().save_lr)
 
-	res_proba = LR_res.predict_proba(news_vectorized)
-	top_3_tags = []
+    res_proba = lr_res.predict_proba(news_vectorized)
+    top_3_tags = []
 
-	for probas in res_proba:
-		cat_and_prob = [pair for pair in zip(probas, LR_res.classes_)]
-		cat_and_prob.sort()
-		top_3_tags.append([cat[1] for cat in cat_and_prob[-1:-4:-1] if cat[0] > 0.07])
+    for probas in res_proba:
+        cat_and_prob = [pair for pair in zip(probas, lr_res.classes_)]
+        cat_and_prob.sort()
+        top_3_tags.append([cat[1] for cat in cat_and_prob[-1:-4:-1] if cat[0] > 0.07])
 
-	return (top_3_tags)
+    return top_3_tags
