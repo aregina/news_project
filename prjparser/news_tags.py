@@ -26,6 +26,7 @@ LR = LogisticRegression(penalty='l2', C=100)
 LR.fit(X, y)
 save_LR = pickle.dumps(LR) # save trained algo
 
+
 def get_tags(news):
 	news_vectorized = tf.transform(news)
 	LR_res = pickle.loads(save_LR)
@@ -34,8 +35,8 @@ def get_tags(news):
 	top_3_tags = []
 
 	for probas in res_proba:
-	    cat_and_prob = [pair for pair in zip(probas, LR_res.classes_)]
-	    cat_and_prob.sort()
-	    top_3_tags.append([cat[1] for cat in cat_and_prob[-1:-4:-1] if cat[0] > 0.07])
+		cat_and_prob = [pair for pair in zip(probas, LR_res.classes_)]
+		cat_and_prob.sort()
+		top_3_tags.append([cat[1] for cat in cat_and_prob[-1:-4:-1] if cat[0] > 0.07])
 
-	return(top_3_tags)
+	return (top_3_tags)
