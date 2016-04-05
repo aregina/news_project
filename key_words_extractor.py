@@ -7,6 +7,7 @@ from db.models import KeyWord, News
 from prjparser import key_words
 
 
+# TODO добавить проверку наличия newstext.text. Ломается при отсутсвии
 def key_words_create():
     for news in News.objects.iterator():
         if news.keyword_set.exists(): continue
