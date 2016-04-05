@@ -4,34 +4,40 @@ import os
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "news_project.settings")
 django.setup()
 
-from db.models import *
-import feedparser
-from datetime import datetime as dt
-from time import mktime
-from prjparser import aParser, urlOpen, textParser
+from db.models import News, RssChannels, ASources
+from prjparser import aParser, rssParser
+from datetime import datetime
 
-for rss in RssChannels.objects.iterator():
-    n = 0
-    parser = feedparser.parse(rss.url)
-    for news in parser['items']:
-        url = aParser.remove_query_from_url(news['link'])
-        if not News.objects.filter(url=url)[:1].exists():
-            News.objects.create(site=rss.site,
-                                title=news['title'],
-                                url=url,
-                                pub_date=dt.fromtimestamp(mktime(news['published_parsed'])),
-                                summary=news.get('summary', None))
-            n += 1
-    if n:
-        print("[{}] {} news add from {}".format(dt.now(), n, parser['feed'].title))
 
-for source in ASources.objects.iterator():
-    html_code = urlOpen.get_html(source.url)
-    html_code = textParser.tags_filter_head_and_script(html_code)
-    for url, text in aParser.get_url_and_url_text(html_code, source.url):
-        if not News.objects.filter(url=url)[:1].exists():
-            News.objects.create(site=source.site,
-                                title=text,
-                                url=url,
-                                pub_date=dt.now(),
-                                summary=None)
+def add_news(news_data):
+    if not News.objects.filter(url=news_data.url)[:1].exists():
+        return News.objects.create(site=news_data.site_obj,
+                                   title=news_data.title,
+                                   url=news_data.url,
+                                   pub_date=news_data.pub_date,
+                                   summary=news_data.summary)
+
+
+# TODO добавить проверку типов передоваемых объектов
+def get_news(source: object, parser: staticmethod):
+    """
+    :type source: <class 'django.db.models.base.ModelBase'>
+    :type parser: parser method
+    """
+    for entry in source.objects.iterator():
+        n = 0
+        for news in parser.parse(entry.url):
+            news.site_obj = entry.site
+            if add_news(news):
+                n += 1
+        if n:
+            print("[{}] {} news add from {} {}".format(datetime.now(), n, entry, entry.site.name))
+
+
+def main():
+    get_news(RssChannels, rssParser)
+    get_news(ASources, aParser)
+
+
+if __name__ == "__main__":
+    main()

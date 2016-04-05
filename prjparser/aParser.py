@@ -1,7 +1,7 @@
-from prjparser import urlOpen, textParser
+from prjparser import urlOpen, textParser,model
 import re
 import urllib.parse
-
+from datetime import datetime
 
 def get_a(text):
     end = 0
@@ -49,6 +49,16 @@ def get_url_and_url_text(html_code, site_address):
         len_w = len(words)
         if len_w > 4:
             yield url, " ".join(words)
+
+
+def parse(source_url: str) -> model.NewsData:
+    html_code = urlOpen.get_html(source_url)
+    html_code = textParser.tags_filter_head_and_script(html_code)
+    for url, text in get_url_and_url_text(html_code, source_url):
+        yield model.NewsData(url=url,
+                             title=text,
+                             pub_date=datetime.now(),
+                             summary=None)
 
 
 def main():
