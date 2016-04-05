@@ -35,7 +35,9 @@ class KeyWord(models.Model):
 class NewsTags(models.Model):
     news = models.ManyToManyField(
             News)
-    tags = models.CharField(max_length=40)
+    tag1 = models.CharField(max_length=20)
+    tag2 = models.CharField(max_length=20)
+    tag3 = models.CharField(max_length=20)
 
 
 class ASources(models.Model):
