@@ -12,29 +12,47 @@ news_dict = {"lenta.ru": ["http://www.lenta.ru/rss", ], "tass.ru": ["http://tass
              "rosbalt.ru": ["http://www.rosbalt.ru/feed/"],
              "ria.ru": ["http://ria.ru/export/rss2/economy/index.xml", "http://ria.ru/export/rss2/world/index.xml",
                         "http://ria.ru/export/rss2/politics/index.xml"],
-             "meduza.io": ["https://meduza.io/rss/all"], }
-
-for site_name in news_dict.keys():
-    if not Site.objects.filter(name=site_name).exists():
-        s = Site(name=site_name)
-        s.save()
-    else:
-        s = Site.objects.filter(name=site_name)[:1][0]
-    for rss in news_dict[site_name]:
-        if not RssChannels.objects.filter(url=rss).exists():
-            r = RssChannels(site=s, url=rss)
-            r.save()
+             "meduza.io": ["https://meduza.io/rss/all"],}
 
 link_dict = {'lenta.ru': "http://lenta.ru/",
              "rbc.ru": "http://www.rbc.ru/"}
 
-for site_name in link_dict.keys():
-    if not Site.objects.filter(name=site_name).exists():
-        s = Site(name=site_name)
-        s.save()
-    else:
-        s = Site.objects.filter(name=site_name)[:1][0]
-    link = link_dict[site_name]
-    if not ASources.objects.filter(url=link).exists():
-        ASources.objects.create(site=s, url=link)
 
+def get_site(name):
+    site = Site.objects.filter(name=name)[:1]
+    if not site.exists():
+        return Site.objects.create(name=name)
+    else:
+        return site[0]
+
+
+def rss_create(site, rss_list):
+    for rss in rss_list:
+        channel = RssChannels.objects.filter(url=rss)[:1]
+        if not channel.exists():
+            RssChannels.objects.create(site=site, url=rss)
+
+
+def a_create(site, link):
+    if not ASources.objects.filter(url=link).exists():
+        ASources.objects.create(site=site, url=link)
+
+
+def make_database_entry(source_dict, entry_type):
+    for site_name in source_dict.keys():
+        s = get_site(site_name)
+        if entry_type == "rss":
+            rss_create(s, source_dict[site_name])
+        elif entry_type == "a":
+            a_create(s, source_dict[site_name])
+        else:
+            raise TypeError
+
+
+def main():
+    make_database_entry(news_dict, "rss")
+    make_database_entry(link_dict, "a")
+
+
+if __name__ == "__main__":
+    main()
