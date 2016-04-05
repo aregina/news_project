@@ -3,6 +3,7 @@ import re
 import urllib.parse
 from datetime import datetime
 
+
 def get_a(text):
     end = 0
     while end < len(text):
@@ -14,7 +15,7 @@ def get_a(text):
             end += y.end()
 
 
-def get_url_or_none(a_tag):
+def get_href_from_a_or_none(a_tag):
     href = re.search("href=\"(.*?)\"", a_tag)
     if not href:
         return
@@ -28,25 +29,46 @@ def remove_query_from_url(url):
     return url
 
 
+def normolize_url(url, news_url):
+    if not url:
+        return
+    if url.startswith('/'):
+        scheme, netloc = urllib.parse.urlparse(news_url)[0:2]
+        site_url = "{}://{}".format(scheme, netloc)
+        url = urllib.parse.urljoin(site_url, url[1:])
+    if not url.startswith('http'):
+        return
+    url = remove_query_from_url(url)
+    return url
+
+
+def get_a_from_news_text(news_url, text):
+    for a in get_a(text):
+        url = get_href_from_a_or_none(a)
+        url = normolize_url(url, news_url)
+        if url:
+            yield url
+
+
+def remove_all_tags(text):
+    return re.sub("<(.|\s)*?>", " ", text)
+
+
 def get_url_and_url_text(html_code, site_address):
     """TODO: looks like textParser.S
     :param site_address:
     :param html_code:
     """
-
     for a in get_a(html_code):
-        url = get_url_or_none(a)
-        if not url:
-            continue
-        if url.startswith('/'):
-            url = urllib.parse.urljoin(site_address, url[1:])
-        if not url.startswith(site_address):
+        url = get_href_from_a_or_none(a)
+        url = normolize_url(url, site_address)
+        if not url or not url.startswith(site_address):
             continue
 
-        url = remove_query_from_url(url)
-
-        words = re.sub("<(.|\s)*?>", " ", a).split()
+        # Считаем количество слов в ссылке и убираем лишние пробелы
+        words = remove_all_tags(a).split()
         len_w = len(words)
+        # ссылки с количеством слов меньше 4 не ведут на новость
         if len_w > 4:
             yield url, " ".join(words)
 

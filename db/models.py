@@ -25,15 +25,21 @@ class NewsText(models.Model):
         primary_key=True,
     )
     text = models.TextField()
+    is_parsed = models.BooleanField(default=False)
 
 
 class KeyWord(models.Model):
     news = models.ManyToManyField(
-            News)
-    word = models.CharField(max_length=300)
+        News)
+    word = models.CharField(max_length=300, db_index=True)
 
 
 class ASources(models.Model):
     site = models.ForeignKey(Site, on_delete=models.CASCADE)
     url = models.URLField(max_length=300)
 
+
+class UrlInText(models.Model):
+    news = models.ManyToManyField(
+        News)
+    url = models.URLField(max_length=300, db_index=True)

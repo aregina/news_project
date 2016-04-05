@@ -30,5 +30,13 @@
     {% endfor %}
 </p>
 {% endif %}
+{% if news.urlintext_set.exists %}
+<h3> Url in text</h3>
+<ul>
+    {% for url in news.urlintext_set.all %}
+    <li><a href="{{ url.url }}">{{ url.url }}</a></li>
+    {% endfor %}
+</ul>
+{% endif %}
 </body>
 </html>
