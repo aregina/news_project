@@ -40,7 +40,7 @@ def get_url_and_url_text(html_code, site_address):
             continue
         if url.startswith('/'):
             url = urllib.parse.urljoin(site_address, url[1:])
-        if not url.startswith("http"):
+        if not url.startswith(site_address):
             continue
 
         url = remove_query_from_url(url)

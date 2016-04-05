@@ -37,7 +37,7 @@ def rss_create(site, rss_list):
 
 
 def a_create(site, link):
-    if not ASources.objects.filter(url=link).exists():
+    if not ASources.objects.filter(url=link)[:1].exists():
         ASources.objects.create(site=site, url=link)
 
 
