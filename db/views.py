@@ -25,9 +25,18 @@ def tags(request):
 
 
 def tag_detail(request, tag=''):
-    key_word = get_object_or_404(KeyWord, word=tag)
-    context = {"key": key_word}
-    return render(request, 'db/index.html', context)
+    tag = tag.split('+')
+    if len(tag) == 1:
+        key_word = get_object_or_404(KeyWord, word=tag[0])
+        context = {"key": key_word}
+        return render(request, 'db/index.html', context)
+    else:
+        news = News.objects
+        for key in tag:
+            if not key: continue
+            news = news.filter(keyword__word=key)
+        context = {"news_list": news, "key_list": tag}
+    return render(request, 'db/key_list.html', context)
     #
 
 
