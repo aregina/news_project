@@ -10,7 +10,9 @@ from prjparser import textParser, urlOpen, aParser
 
 def parse_news():
     for news in News.objects.iterator():
-        if hasattr(news, 'newstext'): continue
+        #TODO переделать на флаг
+        if hasattr(news, 'newstext'):
+            continue
         html = urlOpen.get_html(news.url)
         if html:
             print(str(news.id) + "     ", end='\r')

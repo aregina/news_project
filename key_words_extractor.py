@@ -10,7 +10,8 @@ from prjparser import key_words
 # TODO добавить проверку наличия newstext.text. Ломается при отсутсвии
 def key_words_create():
     for news in News.objects.iterator():
-        if news.keyword_set.exists(): continue
+        if news.keyword_set.exists():
+            continue
         key_word_list = key_words.get_key_word(news.newstext.text, news.title)
         print(key_word_list)
         for word in key_word_list:
