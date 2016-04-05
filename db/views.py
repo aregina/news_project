@@ -36,7 +36,7 @@ def tag_detail(request, tag=''):
             if not key: continue
             news = news.filter(keyword__word=key)
         context = {"news_list": news, "key_list": tag}
-    return render(request, 'db/key_list.html', context)
+        return render(request, 'db/key_list.html', context)
     #
 
 
