@@ -11,6 +11,7 @@ class News(models.Model):
     url = models.URLField(max_length=300, db_index=True)
     pub_date = models.DateTimeField('date published', db_index=True)
     summary = models.TextField(blank=True, null=True)
+    is_parsed = models.BooleanField('text was parsed?', default=False)
 
 
 class RssChannels(models.Model):

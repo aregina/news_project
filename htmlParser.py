@@ -9,15 +9,14 @@ from prjparser import textParser, urlOpen, aParser
 
 
 def parse_news():
-    for news in News.objects.iterator():
-        #TODO переделать на флаг
-        if hasattr(news, 'newstext'):
-            continue
+    for news in News.objects.filter(is_parsed=False).iterator():
+        print(str(news.id) + "     ", end='\r')
         html = urlOpen.get_html(news.url)
         if html:
-            print(str(news.id) + "     ", end='\r')
             text = textParser.get_text_from_html(html)
             NewsText.objects.create(news=news, text=text)
+            news.is_parsed = True
+            news.save()
 
 
 def parse_news_text(news_text: NewsText):

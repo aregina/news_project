@@ -2,6 +2,8 @@ import html
 import re
 
 
+# TODO все переделать нах
+
 def tags_filter_head_and_script(txt):
     # срезаем  head инорируя регистр(на некоторых сайтах HEAD)
     head_match = re.search("</\s*?head\s*?>", txt, re.IGNORECASE)
@@ -106,7 +108,6 @@ def S(text):
 
 
 def get_text_from_html(text):
-
     text = tags_filter(text)
     text = S(text)
     max_char, min_char, line_list = get_list_of_lines(text)
@@ -146,7 +147,6 @@ def get_text_from_html(text):
 
 
 def main():
-
     import prjparser.urlOpen
 
     text = prjparser.urlOpen.get_html("http://ria.ru/world/20160330/1400076815.html")
