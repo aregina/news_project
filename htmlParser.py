@@ -2,10 +2,9 @@ from utils import DjangoSetup # setup django environment
 from db.models import News, NewsText, UrlInText
 from prjparser import textParser, urlOpen, aParser
 from django.db import transaction
-from time import time
 
 
-# @transaction.atomic
+@transaction.atomic
 def parse_news(n=None):
 
     for news in News.objects.filter(is_parsed=False)[:n].iterator():
@@ -32,8 +31,11 @@ def parse_news_text(news_text: NewsText):
     news_text.save()
 
 
+
 def main():
-    parse_news(1)
+
+
+    parse_news(10)
     # for news_text in NewsText.objects.filter(is_parsed=False).iterator():
     #     parse_news_text(news_text)
 

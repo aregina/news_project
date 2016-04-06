@@ -6,11 +6,6 @@ from prjparser import urlOpen, textParser
 import os
 
 
-def info():
-    print('module name:', __name__)
-    print('parent process:', os.getppid())
-    print('process id:', os.getpid())
-
 
 def worker(input_q: JoinableQueue, output: Queue):
     from django import db
