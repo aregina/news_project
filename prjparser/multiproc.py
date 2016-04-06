@@ -9,6 +9,15 @@ class MultiProc:
         self.result_queue = Queue()
         self.process_number = process_number
 
+    def worker(self, parse_obj):
+        raise NotImplementedError
+
+    def task_manager(self):
+        raise NotImplementedError
+
+    def writer(self, write_obj):
+        raise NotImplementedError
+
     def __worker_function(self, worker):
         db.connection.close()
         while True:
@@ -19,7 +28,6 @@ class MultiProc:
             # task_queue.task_done()
             if result:
                 self.result_queue.put(result)
-        print("exit")
 
     def __invoke_worker_process(self, worker_function):
         process_list = []
@@ -29,11 +37,14 @@ class MultiProc:
             process_list.append(p)
         self.process_list = process_list
 
+    def __invoke_task_process(self, task_function):
+        p = Process(target=self.__task_process, args=(task_function,))
+        p.start()
+
     def __task_process(self, task_function):
         for task in task_function():
             self.task_queue.put(task)
-
-    def __generate_end_signal(self):
+        # generate end signal
         for i in range(self.process_number):
             self.task_queue.put("end")
 
@@ -53,7 +64,6 @@ class MultiProc:
             write_function(result)
 
     def run(self):
-        self.__invoke_worker_process()
-        task_process(parse_news_task_manager, task_queue)
-        generate_end_signal(process_number, task_queue)
-        writer(parse_news_writer, result_queue, process_list)
+        self.__invoke_worker_process(self.worker)
+        self.__invoke_task_process(self.task_manager)
+        self.__writer(write_function=self.writer)

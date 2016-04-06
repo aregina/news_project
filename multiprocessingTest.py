@@ -3,8 +3,6 @@ from utils import DjangoSetup
 from multiprocessing import JoinableQueue, Process, Queue
 from db.models import News
 from prjparser import urlOpen, textParser
-import os
-
 
 
 def worker(input_q: JoinableQueue, output: Queue):
@@ -50,9 +48,8 @@ for i in range(PROCESS_NUM):
     p.start()
     process_list.append(p)
 
-task_w = Process(target=task_writer,args=(task_queue,))
+task_w = Process(target=task_writer, args=(task_queue,))
 task_w.start()
-
 
 # task_queue.join()
 
