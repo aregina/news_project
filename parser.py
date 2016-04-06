@@ -1,6 +1,6 @@
 import django
 import os
-
+from django.db import transaction
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "news_project.settings")
 django.setup()
 
@@ -26,10 +26,11 @@ def get_news(source: object, parser: staticmethod):
     """
     for entry in source.objects.iterator():
         n = 0
-        for news in parser.parse(entry.url):
-            news.site_obj = entry.site
-            if add_news(news):
-                n += 1
+        with transaction.atomic(): # атомарная транзакция
+            for news in parser.parse(entry.url):
+                news.site_obj = entry.site
+                if add_news(news):
+                    n += 1
         if n:
             print("[{}] {} news add from {} {}".format(datetime.now(), n, entry, entry.site.name))
 
