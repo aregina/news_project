@@ -26,20 +26,25 @@ class NewsText(models.Model):
     )
     text = models.TextField()
 
+
 class KeyWord(models.Model):
-    news = models.ManyToManyField(
-            News)
+    news = models.ManyToManyField(News)
     word = models.CharField(max_length=300)
 
+
 class NewsTags(models.Model):
+    # поле должно ссылаться на News а не Site
     news = models.ForeignKey(Site, on_delete=models.CASCADE)
+    # если тут использовать CharField то нет смысла заводить таблицу AllTags(models.Model):
+    # можно переделать на ForeignKey(AllTags...) или убрать таблицу
     tag = models.CharField(max_length=20)
     weight = models.DecimalField(max_digits=6, decimal_places=3)
+
 
 class ASources(models.Model):
     site = models.ForeignKey(Site, on_delete=models.CASCADE)
     url = models.URLField(max_length=300)
 
+
 class AllTags(models.Model):
     tag = models.CharField(max_length=20)
-    
