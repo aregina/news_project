@@ -52,3 +52,6 @@ def get_tags(news):
         top_3_tags.append([cat for cat in cat_and_prob[-1:-4:-1] if cat[0] > 0.07])
 
     return top_3_tags
+
+if __name__ == "__main__":
+    get_tags()
