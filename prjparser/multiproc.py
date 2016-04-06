@@ -1,3 +1,5 @@
+from queue import Empty
+
 from django.db import transaction
 from django import db
 from multiprocessing import Process, Queue
@@ -18,7 +20,15 @@ class MultiProc:
     def writer(self, write_obj):
         raise NotImplementedError
 
-    def __worker_function(self, worker):
+    def __invoke_worker_process(self, worker_function):
+        process_list = []
+        for i in range(self.process_number):
+            p = Process(target=self.__worker_process, args=(worker_function,))
+            p.start()
+            process_list.append(p)
+        self.process_list = process_list
+
+    def __worker_process(self, worker):
         db.connection.close()
         while True:
             task = self.task_queue.get(timeout=10)
@@ -28,14 +38,6 @@ class MultiProc:
             # task_queue.task_done()
             if result:
                 self.result_queue.put(result)
-
-    def __invoke_worker_process(self, worker_function):
-        process_list = []
-        for i in range(self.process_number):
-            p = Process(target=self.__worker_function, args=(worker_function,))
-            p.start()
-            process_list.append(p)
-        self.process_list = process_list
 
     def __invoke_task_process(self, task_function):
         p = Process(target=self.__task_process, args=(task_function,))
@@ -59,7 +61,7 @@ class MultiProc:
         while not self.result_queue.empty() or self.__check_process():
             try:
                 result = self.result_queue.get(timeout=0.1)
-            except:
+            except Empty:
                 continue
             write_function(result)
 
