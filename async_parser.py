@@ -21,7 +21,7 @@ class RssParser(multiproc.MultiProc):
         rss = container[0]
         for news in news_list:
             if add_news(news):
-                n = +1
+                n += 1
         if n:
             print("[{}] {} news add from {} {}".format(datetime.now(), n, rss, rss.site.name))
 
@@ -45,7 +45,7 @@ class ASourceParser(multiproc.MultiProc):
         a_source = container[0]
         for news in news_list:
             if add_news(news):
-                n = +1
+                n += 1
         if n:
             print("[{}] {} news add from {} {}".format(datetime.now(), n, a_source, a_source.site.name))
 
