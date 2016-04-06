@@ -46,7 +46,8 @@ def get_tags(news):
     
     top_3_tags = []
     for probas in res_proba:
-        cat_and_prob = [pair for pair in zip(round(probas, 3), lr_res.classes_)]
+        probas_round = round(probas, 3)
+        cat_and_prob = [pair for pair in zip(probas_round, lr_res.classes_)]
         cat_and_prob.sort()
         top_3_tags.append([cat for cat in cat_and_prob[-1:-4:-1] if cat[0] > 0.07])
 
