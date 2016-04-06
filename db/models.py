@@ -41,5 +41,5 @@ class ASources(models.Model):
     url = models.URLField(max_length=300)
 
 class AllTags(models.Model):
-    name = models.CharField(max_length=20)
+    tag = models.CharField(max_length=20)
     
