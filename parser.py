@@ -3,6 +3,7 @@ from utils import DjangoSetup
 from db.models import News, RssChannels, ASources
 from prjparser import aParser, rssParser
 from datetime import datetime
+from django.db import transaction
 
 
 def add_news(news_data):

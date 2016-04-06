@@ -58,7 +58,7 @@ class MultiProc:
     def __writer(self, write_function):
         while not self.result_queue.empty() or self.__check_process():
             try:
-                result = self.result_queue.get(timeout=1)
+                result = self.result_queue.get(timeout=0.1)
             except:
                 continue
             write_function(result)
