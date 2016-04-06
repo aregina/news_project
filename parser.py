@@ -1,9 +1,5 @@
 import django
-import os
-from django.db import transaction
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "news_project.settings")
-django.setup()
-
+from utils import DjangoSetup
 from db.models import News, RssChannels, ASources
 from prjparser import aParser, rssParser
 from datetime import datetime

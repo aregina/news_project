@@ -73,7 +73,7 @@ def get_url_and_url_text(html_code, site_address):
             yield url, " ".join(words)
 
 
-def parse(source_url: str) -> model.NewsData:
+def parse(source_url: str):
     html_code = urlOpen.get_html(source_url)
     html_code = textParser.tags_filter_head_and_script(html_code)
     for url, text in get_url_and_url_text(html_code, source_url):
