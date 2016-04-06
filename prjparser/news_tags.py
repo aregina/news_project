@@ -24,22 +24,30 @@ def teach():
 
     lr = LogisticRegression(penalty='l2', C=100)
     lr.fit(train, y)
-    save_lr = pickle.dumps(lr)  # save trained algo
-    return save_lr
+    
+    lr_file = open('lr.txt','br+')
+    pickle.dump(lr, lr_file)
+    lr_file.close()
 
 teach()
+
 
 def get_tags(news):
     tf = TfidfVectorizer(ngram_range=(1, 1))
     news_vectorized = tf.transform(news)
-    lr_res = pickle.loads(teach().save_lr)
+    
+    # take lr algo from file
+    lr_file = open('lr.txt', 'br')
+    lr_pickled = lr_file.read()
+    lr = pickle.loads(lr_pickled)
+    lr_file.close()
 
-    res_proba = lr_res.predict_proba(news_vectorized)
+    res_proba = lr.predict_proba(news_vectorized)
+    
     top_3_tags = []
-
     for probas in res_proba:
         cat_and_prob = [pair for pair in zip(probas, lr_res.classes_)]
         cat_and_prob.sort()
-        top_3_tags.append([cat[1] for cat in cat_and_prob[-1:-4:-1] if cat[0] > 0.07])
+        top_3_tags.append([cat for cat in cat_and_prob[-1:-4:-1] if cat[0] > 0.07])
 
     return top_3_tags
