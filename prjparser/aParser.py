@@ -1,25 +1,28 @@
-from prjparser import urlOpen, textParser,model
 import re
 import urllib.parse
 from datetime import datetime
 
+from prjparser import urlOpen, textParser, model
+
 
 def get_a(text):
     end = 0
+    # TODO re.compile before loop
     while end < len(text):
         y = re.search("<a(.|\s)*?</a>", text[end:])
-        if not y:
-            return
-        else:
+        if y:
             yield y.group()
             end += y.end()
+        else:
+            return  # StopIteration
 
 
 def get_href_from_a_or_none(a_tag):
     href = re.search("href=\"(.*?)\"", a_tag)
-    if not href:
-        return
-    return href.group(1)
+    if href:
+        return href.group(1)
+    else:
+        return None
 
 
 def remove_query_from_url(url):
@@ -29,7 +32,7 @@ def remove_query_from_url(url):
     return url
 
 
-def normolize_url(url, news_url):
+def normalize_url(url, news_url):
     if not url:
         return
     if url.startswith('/'):
@@ -45,7 +48,7 @@ def normolize_url(url, news_url):
 def get_a_from_news_text(news_url, text):
     for a in get_a(text):
         url = get_href_from_a_or_none(a)
-        url = normolize_url(url, news_url)
+        url = normalize_url(url, news_url)
         if url:
             yield url
 
@@ -61,7 +64,7 @@ def get_url_and_url_text(html_code, site_address):
     """
     for a in get_a(html_code):
         url = get_href_from_a_or_none(a)
-        url = normolize_url(url, site_address)
+        url = normalize_url(url, site_address)
         if not url or not url.startswith(site_address):
             continue
 
