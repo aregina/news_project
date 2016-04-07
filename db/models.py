@@ -25,6 +25,7 @@ class NewsText(models.Model):
         primary_key=True,
     )
     text = models.TextField()
+    check = models.BooleanField(initial=False)
 
 
 class KeyWord(models.Model):
