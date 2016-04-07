@@ -8,11 +8,16 @@ from prjparser import news_tags
 
 
 def tags_create():
-
     for news in NewsText.objects.filter(check_tag=False).iterator():
         tags_list = news_tags.get_tags(news.newstext.text)
         for tag in tags_list:
-            news_tag = NewsTags.objects.create(news=news, weight=tag[0], tag=tag[1])
+            try:
+                tag_id = AllTags.objects.get(tag=tag[1])
+                NewsTags.objects.create(news=news, weight=tag[0], tag=tag_id)
+            except:
+                tag_id = AllTags.objects.create(tag=tag[1])
+                NewsTags.objects.create(news=news, weight=tag[0], tag=tag_id)
+                
         news.check_tag = True
         news.save()
 
