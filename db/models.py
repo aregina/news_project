@@ -33,11 +33,8 @@ class KeyWord(models.Model):
 
 
 class NewsTags(models.Model):
-    # поле должно ссылаться на News а не Site
-    news = models.ForeignKey(Site, on_delete=models.CASCADE)
-    # если тут использовать CharField то нет смысла заводить таблицу AllTags(models.Model):
-    # можно переделать на ForeignKey(AllTags...) или убрать таблицу
-    tag = models.CharField(max_length=20)
+    news = models.ForeignKey(News, on_delete=models.CASCADE)
+    tag = models.ForeignKey(AllTags, on_delete=models.CASCADE)
     weight = models.DecimalField(max_digits=6, decimal_places=3)
 
 
