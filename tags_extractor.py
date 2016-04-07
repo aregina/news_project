@@ -14,10 +14,9 @@ def tags_create():
         for tag in tags_list:
             try:
                 tag_from_db = AllTags.objects.get(tag=tag[1])
-                tag_id = tag_from_db.id
             except AllTags.DoesNotExist:
                 tag_from_db = AllTags.objects.create(tag=tag[1])
-                tag_id = tag_from_db.id
+            tag_id = tag_from_db.id
             NewsTags.objects.create(news=news_text, weight=tag[0], tag=tag_id)
                 
         news.check_tag = True
