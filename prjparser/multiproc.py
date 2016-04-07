@@ -5,7 +5,7 @@ from django import db
 from multiprocessing import Process, Queue
 
 
-class MultiProc:
+class MultiProc(object):
     end_signal = "end"
 
     def __init__(self, process_number=10):
