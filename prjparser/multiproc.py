@@ -6,6 +6,8 @@ from multiprocessing import Process, Queue
 
 
 class MultiProc:
+    end_signal = "end"
+
     def __init__(self, process_number=10):
         self.task_queue = Queue()
         self.result_queue = Queue()
@@ -32,7 +34,7 @@ class MultiProc:
         db.connection.close()
         while True:
             task = self.task_queue.get(timeout=10)
-            if task == "end":
+            if task == self.end_signal:
                 break
             result = worker(task)
             # task_queue.task_done()
@@ -48,7 +50,7 @@ class MultiProc:
             self.task_queue.put(task)
         # generate end signal
         for i in range(self.process_number):
-            self.task_queue.put("end")
+            self.task_queue.put(self.end_signal)
 
     def __check_process(self):
         status = []
