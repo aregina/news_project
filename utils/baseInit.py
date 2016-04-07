@@ -15,10 +15,11 @@ news_dict = {"lenta.ru": ["http://www.lenta.ru/rss", ],
              "rosbalt.ru": ["http://www.rosbalt.ru/feed/"],
              "ria.ru": ["http://ria.ru/export/rss2/economy/index.xml", "http://ria.ru/export/rss2/world/index.xml",
                         "http://ria.ru/export/rss2/politics/index.xml"],
-             "meduza.io": ["https://meduza.io/rss/all"], }
+             "meduza.io": ["https://meduza.io/rss/all"],}
 
-link_dict = {'lenta.ru': "http://lenta.ru/",
-             "rbc.ru": "http://www.rbc.ru/"}
+link_dict = {"lenta.ru": "http://lenta.ru/",
+             "rbc.ru": "http://www.rbc.ru/",
+             "kommersant.ru": "http://kommersant.ru/"}
 
 
 def get_site(name):

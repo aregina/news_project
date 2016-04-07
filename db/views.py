@@ -42,7 +42,6 @@ def tag_detail(request, tag=''):
     return render(request, 'db/key_list.html', context)
 
 
-
 def news_detail(request, news_id=0):
     news = get_object_or_404(News, pk=news_id)
     context = {"news": news}
