@@ -52,11 +52,8 @@ class NewsTextParser(multiproc.MultiProc):
 
 
 def main():
-    parser = HtmlParser(process_number=20)
-    parser.run()
-
-    parser_text = NewsTextParser()
-    parser_text.run()
+    HtmlParser(process_number=20).run()
+    NewsTextParser().run()
 
 
 if __name__ == "__main__":

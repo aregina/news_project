@@ -1,8 +1,8 @@
+from datetime import datetime
 from utils import DjangoSetup
-from prjparser import multiproc
 from db.models import News, RssChannels, ASources
 from prjparser import aParser, rssParser
-from datetime import datetime
+from prjparser import multiproc
 
 
 def add_news(news_data):
@@ -33,9 +33,7 @@ class RssParser(multiproc.MultiProc):
         if news_list:
             return [rss, news_list]
 
-    def task_manager(self):
-        for rss in RssChannels.objects.iterator():
-            yield rss
+    task_manager = RssChannels.objects.iterator
 
 
 class ASourceParser(multiproc.MultiProc):
@@ -57,17 +55,12 @@ class ASourceParser(multiproc.MultiProc):
         if news_list:
             return [source, news_list]
 
-    def task_manager(self):
-        for source in ASources.objects.iterator():
-            yield source
+    task_manager = ASources.objects.iterator
 
 
 def main():
-    rss_parser = RssParser()
-    rss_parser.run()
-
-    a_source_parser = ASourceParser()
-    a_source_parser.run()
+    RssParser().run()
+    ASourceParser().run()
 
 
 if __name__ == "__main__":
