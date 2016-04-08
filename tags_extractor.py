@@ -19,8 +19,8 @@ def tags_create():
             tag_id = tag_from_db.id
             NewsTags.objects.create(news=news_text, weight=tag[0], tag=tag_id)
 
-        news.check_tag = True
-        news.save()
+        news_text.check_tag = True
+        news_text.save()
 
 
 if __name__ == "__main__":
