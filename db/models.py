@@ -27,12 +27,18 @@ class NewsText(models.Model):
     )
     text = models.TextField()
     is_parsed = models.BooleanField(default=False)
+    check_tag = models.BooleanField(initial=False)
 
 
 class KeyWord(models.Model):
-    news = models.ManyToManyField(
-        News)
-    word = models.CharField(max_length=300, db_index=True)
+    news = models.ManyToManyField(News)
+    word = models.CharField(max_length=300)
+
+
+class NewsTags(models.Model):
+    news = models.ForeignKey(News, on_delete=models.CASCADE)
+    tag = models.ForeignKey(AllTags, on_delete=models.CASCADE)
+    weight = models.DecimalField(max_digits=6, decimal_places=3)
 
 
 class ASources(models.Model):
@@ -44,3 +50,7 @@ class UrlInText(models.Model):
     news = models.ManyToManyField(
         News)
     url = models.URLField(max_length=300, db_index=True)
+
+
+class AllTags(models.Model):
+    tag = models.CharField(max_length=20)
