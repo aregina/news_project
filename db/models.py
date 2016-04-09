@@ -27,12 +27,16 @@ class NewsText(models.Model):
     )
     text = models.TextField()
     is_parsed = models.BooleanField(default=False)
-    check_tag = models.BooleanField(initial=False)
+    check_tag = models.BooleanField(default=False)
 
 
 class KeyWord(models.Model):
     news = models.ManyToManyField(News)
     word = models.CharField(max_length=300)
+
+
+class AllTags(models.Model):
+    tag = models.CharField(max_length=20)
 
 
 class NewsTags(models.Model):
@@ -50,7 +54,3 @@ class UrlInText(models.Model):
     news = models.ManyToManyField(
         News)
     url = models.URLField(max_length=300, db_index=True)
-
-
-class AllTags(models.Model):
-    tag = models.CharField(max_length=20)
