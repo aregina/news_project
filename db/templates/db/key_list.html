@@ -18,10 +18,13 @@
     </style>
 </head>
 <body>
-<h2>{{ key.news.count }}</h2>
-<h1>{{ key.word }}</h1>
+<h1>
+    {% for key in key_list %}
+        _ {{ key }} _
+    {% endfor %}
+</h1>
 <ul>
-{% for news in key.news.all %}
+{% for news in news_list.all %}
     <li><a href="/news/id{{ news.id }}">{{ news.site.name}} - {{ news.title }} </a> </li>
 {% endfor %}
 </ul>
