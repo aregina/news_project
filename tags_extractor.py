@@ -20,7 +20,6 @@ def tags_create():
         news_text.news.check_tag = True
         news_text.news.save()
 
-
 if __name__ == "__main__":
     tags_create()
 
