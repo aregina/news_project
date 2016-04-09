@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ news.title }}</title>
+    <style>
+        a {
+            text-decoration: none;
+            color:black;
+        }
+        a:hover {
+            color:#484959;
+        }
+
+    </style>
+</head>
+<body>
+<h2>{{ news.site.name }}</h2>
+<h1>{{ news.title }}</h1>
+<p>{{ news.newstext.text }}</p>
+<a href="{{ news.url }}">{{ news.url }}</a>
+<br>
+{% if news.keyword_set %}
+<h3> Keywords</h3>
+<p>
+    {% for k in news.keyword_set.all %}
+    <a href="/tags/{{ k.word }}">
+        <span style="font-size:{{ k.cnt_n }}em">{{ k.word }}</span>
+    </a>
+    {% endfor %}
+</p>
+{% endif %}
+{% if news.urlintext_set.exists %}
+<h3> Url in text</h3>
+<ul>
+    {% for url in news.urlintext_set.all %}
+    <li><a href="{{ url.url }}">{{ url.url }}</a></li>
+    {% endfor %}
+</ul>
+{% endif %}
+</body>
+</html>
