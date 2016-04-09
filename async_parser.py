@@ -17,8 +17,7 @@ def add_news(news_data):
 class RssParser(multiproc.MultiProc):
     def writer(self, container):
         n = 0
-        news_list = container[1]
-        rss = container[0]
+        rss, news_list = container
         for news in news_list:
             if add_news(news):
                 n += 1
@@ -31,7 +30,7 @@ class RssParser(multiproc.MultiProc):
             news.site_obj = rss.site
             news_list.append(news)
         if news_list:
-            return [rss, news_list]
+            return rss, news_list
 
     task_manager = RssChannels.objects.iterator
 
@@ -39,8 +38,7 @@ class RssParser(multiproc.MultiProc):
 class ASourceParser(multiproc.MultiProc):
     def writer(self, container):
         n = 0
-        news_list = container[1]
-        a_source = container[0]
+        a_source, news_list = container
         for news in news_list:
             if add_news(news):
                 n += 1
@@ -53,7 +51,7 @@ class ASourceParser(multiproc.MultiProc):
             news.site_obj = source.site
             news_list.append(news)
         if news_list:
-            return [source, news_list]
+            return source, news_list
 
     task_manager = ASources.objects.iterator
 
