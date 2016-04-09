@@ -3,13 +3,13 @@ import os, django
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "news_project.settings")
 django.setup()
 
-from db.models import KeyWord, News
+from db.models import KeyWord, News, NewsText
 from prjparser import key_words
 
 
 def key_words_create():
-    for news in News.objects.iterator():
-        key_word_list = key_words.get_key_word(news.newstext.text, news.title)
+    for newstext in NewsText.objects.filter(is_keywords_extracted=False).iterator():
+        key_word_list = key_words.get_key_word(newstext.text, newstext.news.title)
         print(key_word_list)
         for word in key_word_list:
             try:
@@ -17,7 +17,7 @@ def key_words_create():
             except:
                 key_word = KeyWord(word=word)
                 key_word.save()
-            key_word.news.add(news)
+            key_word.news.add(newstext)
 
 
 def make_query(keys_list):
