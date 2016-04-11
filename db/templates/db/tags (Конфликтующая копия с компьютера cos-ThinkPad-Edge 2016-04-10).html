@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Tags</title>
+    <style>
+        p {
+            text-align:center;
+        }
+        a {
+            text-decoration: none;
+            color:black;
+        }
+        a:hover {
+            color:#484959;
+        }
+
+    </style>
+</head>
+<body>
+
+<p>
+    {% for k in key %}
+    <a href="{{ k.word }}">
+        <span style="font-size:{{ k.cnt_n }}em">{{ k.word }}</span>
+    </a>
+    {% endfor %}
+</p>
+</body>
+</html>
