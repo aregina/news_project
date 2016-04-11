@@ -25,7 +25,7 @@ def teach():
     lr = LogisticRegression(penalty='l2', C=100)
     lr.fit(train, y)
     
-    lr_file = open('lr.txt','br+')
+    lr_file = open('lr.txt', 'br+')
     pickle.dump(lr, lr_file)
     lr_file.close()
 

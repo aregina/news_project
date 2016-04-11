@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Tags</title>
     <style>
         p {
             text-align:center;
@@ -18,12 +18,13 @@
     </style>
 </head>
 <body>
-<h2>{{ key.news.count }}</h2>
-<h1>{{ key.word }}</h1>
-<ul>
-{% for news in key.news.all %}
-    <li><a href="/news/id{{ news.id }}">{{ news.site.name}} - {{ news.title }} </a> </li>
-{% endfor %}
-</ul>
+
+<p>
+    {% for k in key %}
+    <a href="{{ k.word }}">
+        <span style="font-size:{{ k.cnt_n }}em">{{ k.word }}</span>
+    </a>
+    {% endfor %}
+</p>
 </body>
 </html>
