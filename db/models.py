@@ -42,7 +42,7 @@ class AllTags(models.Model):
 
 
 class NewsTags(models.Model):
-    news = models.ForeignKey(News, on_delete=models.CASCADE)
+    news = models.ForeignKey(NewsText, on_delete=models.CASCADE)
     tag = models.ForeignKey(AllTags, on_delete=models.CASCADE)
     weight = models.DecimalField(max_digits=6, decimal_places=3)
 

@@ -9,16 +9,9 @@ from prjparser import key_words
 
 # TODO добавить проверку наличия newstext.text. Ломается при отсутсвии
 def key_words_create():
-<<<<<<< HEAD
+
     for newstext in NewsText.objects.filter(is_keywords_extracted=False).iterator():
         key_word_list = key_words.get_key_word(newstext.text, newstext.news.title)
-=======
-    for news in News.objects.iterator():
-        # Создать отдельный флаг для полей где уже были выделены ключи
-        if news.keyword_set.exists():
-            continue
-        key_word_list = key_words.get_key_word(news.newstext.text, news.title)
->>>>>>> master
         print(key_word_list)
         for word in key_word_list:
             try:
