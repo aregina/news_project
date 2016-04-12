@@ -12,6 +12,9 @@ class MultiProc(object):
         self.result_queue = Queue()
         self.process_number = process_number
 
+    def __call__(self):
+        self.run()
+
     def worker(self, parse_obj):
         raise NotImplementedError
 
