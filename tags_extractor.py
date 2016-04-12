@@ -1,12 +1,10 @@
-import os, django
-
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "news_project.settings")
-django.setup()
-
+from utils import DjangoSetup
 from db.models import NewsTags, NewsText, AllTags
 from prjparser import news_tags
+from django.db import transaction
 
 
+@transaction.atomic
 def tags_create():
     for news_text in NewsText.objects.filter(check_tag=False).iterator():
         tags_list = news_tags.get_tags(news_text.text)
@@ -22,7 +20,6 @@ def tags_create():
         news_text.check_tag = True
         news_text.save()
 
+
 if __name__ == "__main__":
     tags_create()
-
-
