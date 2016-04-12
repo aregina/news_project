@@ -8,7 +8,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('db', '0009_auto_20160405_0949'),
+        ('db', '0009_newstext_is_keywords_extracted'),
     ]
 
     operations = [
