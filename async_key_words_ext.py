@@ -23,6 +23,8 @@ class KeyWordsExtractor(multiproc.MultiProc):
                 key_word = KeyWord(word=word)
                 key_word.save()
             news = News.objects.get(pk=news_pk)
+            news.newstext.is_keywords_extracted = True
+            news.newstext.save()
             key_word.news.add(news)
 
 
