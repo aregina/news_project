@@ -66,6 +66,7 @@ def get_key_word(news, news_title):
 
     key_words = []
     for word in all_words:
-        if word not in anti_key_words:
+        if word[0] not in anti_key_words:
             key_words.append(word[0])
+
     return key_words

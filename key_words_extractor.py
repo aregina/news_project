@@ -18,7 +18,7 @@ def key_words_create():
             except:
                 key_word = KeyWord(word=word)
                 key_word.save()
-            key_word.news.add(newstext)
+            key_word.news.add(newstext.news)
 
 
 def make_query(keys_list):
