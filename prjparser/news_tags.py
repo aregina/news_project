@@ -1,21 +1,31 @@
-# import pandas as pd
-from sklearn.linear_model import LogisticRegression
-from sklearn.feature_extraction.text import TfidfVectorizer
+#import pandas as pd
+#from sklearn.linear_model import LogisticRegression
+#from sklearn.feature_extraction.text import TfidfVectorizer
 import re
 import pickle
 from math import trunc
+#from  pymorphy2 import MorphAnalyzer as MA
 
 
 # def teach():
 #     # Initial data
-#     marked = 505
+#     marked = 999
 #     name_of_column = 'text'  # column with news
-#     text = pd.read_csv('teacher.csv').ix[:marked, 0:6]
+#     text = pd.read_csv('teacher_new.csv').ix[:marked, 0:6]
 #     # clean text
 #     text[name_of_column] = text[name_of_column].apply(lambda x: re.sub('[^а-яА-Я]', ' ', x.lower()))
 #
 #     # tf-idf
 #     text_train = text.ix[:, name_of_column]
+#     print(text_train)
+#     for news in text_train:
+#         news_parsed = [MA().parse(word)[0].normal_form for word in news.split()]
+#         sum_news = ''
+#         for i in news_parsed:
+#             sum_news += i + (' ')
+#
+#         print(sum_news)
+#
 #     tf = TfidfVectorizer(ngram_range=(1, 1))
 #     algo = tf.fit(text_train)
 #     train = tf.transform(text_train)
@@ -31,7 +41,7 @@ from math import trunc
 #     lr_file = open('lr.txt', 'br+')
 #     pickle.dump(lr, lr_file)
 #     lr_file.close()
-
+#
 # teach()
 
 
@@ -41,8 +51,10 @@ def get_tags(news):
     tf = pickle.loads(tf_pickled)
     tf_file.close()
 
-    news = [news]
+    news = [re.sub('[^а-яА-Я]', ' ', news.lower())]
     news_vectorized = tf.transform(news)
+    # for i in zip(news_vectorized.toarray()[0], tf.get_feature_names()):
+    #     print(i)
 
     # take lr algo from file
     lr_file = open('prjparser/lr.txt', 'br')
