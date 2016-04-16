@@ -36,7 +36,7 @@ def teach():
 
 
 def get_tags(news):
-    tf_file = open('tf.txt', 'br')
+    tf_file = open('prjparser/tf.txt', 'br')
     tf_pickled = tf_file.read()
     tf = pickle.loads(tf_pickled)
     tf_file.close()
@@ -45,7 +45,7 @@ def get_tags(news):
     news_vectorized = tf.transform(news)
 
     # take lr algo from file
-    lr_file = open('lr.txt', 'br')
+    lr_file = open('prjparser/lr.txt', 'br')
     lr_pickled = lr_file.read()
     lr = pickle.loads(lr_pickled)
     lr_file.close()
