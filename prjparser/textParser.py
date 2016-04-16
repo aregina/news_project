@@ -5,7 +5,7 @@ import re
 # TODO все переделать нах
 
 def tags_filter_head_and_script(txt):
-    # срезаем  head инорируя регистр(на некоторых сайтах HEAD)
+    # срезаем  head инорируя регистр(на некоторых сайтах HEAD in Upper case)
     head_match = re.search("</\s*?head\s*?>", txt, re.IGNORECASE)
     text = txt[head_match.end():]
     text = html.unescape(text)
@@ -15,7 +15,7 @@ def tags_filter_head_and_script(txt):
 
 def tags_filter(txt):
     t = tags_filter_head_and_script(txt)
-    # должна быть независима от регистра
+    # TODO должна быть независима от регистра
     tags = ["header", "svg", "noscript", "form",
             "nav", "iframe", "footer", "time", "noindex", "style", "abbr", "select", "aside", "figure"]
     for tag in tags:
@@ -39,7 +39,7 @@ def tags_filter(txt):
 
 def count_chars(text_line):
     d, c = 0, 0
-    inTag = False
+    in_tag_brackets = False
     left_bracket = False
     in_a_tag = False
     for char in text_line:
@@ -52,16 +52,16 @@ def count_chars(text_line):
                 in_a_tag = False
         elif char == '<':
             left_bracket = True
-            inTag = True
+            in_tag_brackets = True
         elif char == '>':
-            inTag = False
+            in_tag_brackets = False
         elif char == ' ':
             continue
-        elif inTag:
+        elif in_tag_brackets:
             continue
-        elif not inTag and not in_a_tag:
+        elif not in_tag_brackets and not in_a_tag:
             c += 1
-        elif not inTag and in_a_tag:
+        elif not in_tag_brackets and in_a_tag:
             d += 1
     return d, c
 
