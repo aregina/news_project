@@ -10,7 +10,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ('db', '0009_newstext_is_keywords_extracted'),
-        ('db', '0012_news_20160409_0743'),
+        ('db', '0012_news_is_parsed'),
     ]
 
     operations = [
