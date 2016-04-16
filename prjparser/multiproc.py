@@ -55,14 +55,11 @@ class MultiProc(object):
         for i in range(self.process_number):
             self.task_queue.put(self.end_signal)
 
-    def __check_process(self):
-        status = []
-        for p in self.process_list:
-            status.append(p.is_alive())
-        return any(status)
+    def __is_any_alive_process(self):
+        return any(p.is_alive() for p in self.process_list)
 
     def __writer(self, write_function):
-        while not self.result_queue.empty() or self.__check_process():
+        while not self.result_queue.empty() or self.__is_any_alive_process():
             with transaction.atomic():
                 print("task queue {}".format(self.result_queue.qsize()))
                 num = min(self.num_of_write_queue, self.result_queue.qsize())
