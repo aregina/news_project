@@ -4,9 +4,10 @@ from textblob import TextBlob
 
 morph = pymorphy2.MorphAnalyzer()
 
+
 def get_key_words_count(news_words_count, title_words_count):
     total_words_count = news_words_count + title_words_count
-    key_words_count = round((total_words_count/100)*10)
+    key_words_count = round((total_words_count / 100) * 10)
     if key_words_count >= 10 and key_words_count >= 10:
         return key_words_count
     else:

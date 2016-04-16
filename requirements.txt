@@ -3,3 +3,4 @@ Django>=1.9.4
 feedparser>=5.2.0
 sklearn
 NumPy >= 1.6.1.
+textblob

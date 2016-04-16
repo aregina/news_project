@@ -60,14 +60,16 @@ class MultiProc(object):
             status.append(p.is_alive())
         return any(status)
 
-    @transaction.atomic
     def __writer(self, write_function):
         while not self.result_queue.empty() or self.__check_process():
-            try:
-                result = self.result_queue.get(timeout=0.1)
-            except Empty:
-                continue
-            write_function(result)
+            with transaction.atomic():
+                num = min(150, self.result_queue.qsize())
+                for i in range(num):
+                    try:
+                        result = self.result_queue.get(timeout=0.1)
+                    except Empty:
+                        continue
+                    write_function(result)
 
     def run(self):
         self.__invoke_worker_process(self.worker)
