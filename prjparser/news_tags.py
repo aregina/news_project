@@ -10,7 +10,7 @@ def teach():
     # Initial data
     marked = 505
     name_of_column = 'text'  # column with news
-    text = pd.read_csv('teacher.csv').ix[:marked, 0:6]
+    text = pd.read_csv('teacher_new.csv').ix[:marked, 0:6]
     # clean text
     text[name_of_column] = text[name_of_column].apply(lambda x: re.sub('[^а-яА-Я]', ' ', x.lower()))
 
@@ -32,7 +32,7 @@ def teach():
     pickle.dump(lr, lr_file)
     lr_file.close()
 
-teach()
+# teach()
 
 
 def get_tags(news):
