@@ -83,7 +83,20 @@ def get_list_of_lines(text):
     return maximum, minimum, cnt
 
 
-def S(text):
+def delete_bad_links(text):
+    """
+    Метод удаляет ссылки с большим количеством тегов <p> внутри текста ссылки
+    Если количество больше 2 - ссылка удаляется.
+    Два и меньше - теги <p> заменяются на пробелы
+    <a>
+        <p>
+        <p>
+        ...
+        <p>
+    </a>
+    :param text:
+    :return:
+    """
     end = 0
     result = ""
     while end < len(text):
@@ -109,7 +122,7 @@ def S(text):
 
 def get_text_from_html(text):
     text = tags_filter(text)
-    text = S(text)
+    text = delete_bad_links(text)
     max_char, min_char, line_list = get_list_of_lines(text)
     text = ""
     '''
