@@ -160,9 +160,9 @@ def get_text_from_html(text):
 
 
 def main():
-    import prjparser.urlOpen
+    import urlOpen
 
-    text = prjparser.urlOpen.get_html("http://ria.ru/world/20160330/1400076815.html")
+    text = urlOpen.get_html("http://www.interfax.ru/world/502926")
     text = tags_filter(text)
 
     with open("parsed3.html", mode='w', encoding='utf-8') as file:

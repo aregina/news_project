@@ -2,6 +2,7 @@ import urllib.request as u
 import urllib.error
 
 
+# TODO problem with "http://www.interfax.ru/world/502926"
 def get_html(url):
     try:
         with u.urlopen(url) as request:

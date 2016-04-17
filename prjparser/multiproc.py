@@ -61,7 +61,7 @@ class MultiProc(object):
     def __writer(self, write_function):
         while not self.result_queue.empty() or self.__is_any_alive_process():
             with transaction.atomic():
-                print("task queue {}".format(self.result_queue.qsize()))
+                # print("task queue {}".format(self.result_queue.qsize()))
                 num = min(self.num_of_write_queue, self.result_queue.qsize())
                 for i in range(num):
                     try:
