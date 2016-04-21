@@ -1,5 +1,6 @@
-import pymorphy2
 import string
+
+import pymorphy2
 from textblob import TextBlob
 
 MORPH = pymorphy2.MorphAnalyzer()
@@ -23,5 +24,3 @@ def text_prerarer(text):
                 interesting_words_from_news.append(parsed_word.normal_form)
 
     return interesting_words_from_news
-
-
