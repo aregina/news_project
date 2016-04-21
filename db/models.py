@@ -29,6 +29,7 @@ class NewsText(models.Model):
     is_keywords_extracted = models.BooleanField(default=False)
     is_parsed = models.BooleanField(default=False)
     check_tag = models.BooleanField(default=False)
+    is_emo_defined = models.BooleanField(default=False)
 
 
 
