@@ -4,13 +4,13 @@ import pymorphy2
 from textblob import TextBlob
 
 MORPH = pymorphy2.MorphAnalyzer()
-PUNCTUATION_SIMBOLS = string.punctuation
-WHITE_SPASES = ' ' * len(PUNCTUATION_SIMBOLS)
+PUNCTUATION_SIMBOLS = '!"#$%&\'()*+,-./:;<=>?@[\\]^_`{|}~'
+WHITE_SPACES = ' ' * len(PUNCTUATION_SIMBOLS)
 INTERESTING_SPEACH_PARTS = ['NOUN', 'ADJF', 'ADJS', 'VERB', 'NUMR', 'ADVB']
 
 
-def text_prerarer(text):
-    text_without_punctuation = str.maketrans(PUNCTUATION_SIMBOLS, WHITE_SPASES)
+def text_preparer(text):
+    text_without_punctuation = text.maketrans(PUNCTUATION_SIMBOLS, WHITE_SPACES)
     separated_words = text_without_punctuation.split()
 
     tb_news = TextBlob(separated_words)
