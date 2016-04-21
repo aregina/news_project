@@ -38,6 +38,13 @@ def tags_filter(txt):
 
 
 def count_chars(text_line):
+    """
+    Считаем количество букв в строке без ссылок и длинну текста ссылки
+    'asd asd <a href='...'> asd</a>' -> (3, 6)
+
+    :param text_line:
+    :return:
+    """
     d, c = 0, 0
     in_tag_brackets = False
     left_bracket = False
