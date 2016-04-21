@@ -24,11 +24,8 @@ def text_preparer(text):
     text_without_punctuation = text.translate(translate_dict)
     separated_words = text_without_punctuation.split()
 
-    tb_news = TextBlob(separated_words)
-    words_from_news = list(tb_news.words)
-
     interesting_words_from_news = []
-    for word in words_from_news:
+    for word in separated_words:
         parsed_word = MORPH.parse(word)[0]
         if parsed_word.tag.POS in PUNCTUATION_SIMBOLS:
             interesting_words_from_news.append(parsed_word.normal_form)
