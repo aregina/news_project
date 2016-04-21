@@ -1,5 +1,3 @@
-import string
-
 import pymorphy2
 from textblob import TextBlob
 
@@ -22,7 +20,8 @@ INTERESTING_SPEACH_PARTS = [
 
 
 def text_preparer(text):
-    text_without_punctuation = text.maketrans(PUNCTUATION_SIMBOLS, WHITE_SPACES)
+    translate_dict = str.maketrans(PUNCTUATION_SIMBOLS, WHITE_SPACES)
+    text_without_punctuation = text.translate(translate_dict)
     separated_words = text_without_punctuation.split()
 
     tb_news = TextBlob(separated_words)
