@@ -1,5 +1,4 @@
 import pymorphy2
-from textblob import TextBlob
 
 MORPH = pymorphy2.MorphAnalyzer()
 PUNCTUATION_SIMBOLS = '!"#$%&\'()*+,-./:;<=>?@[\\]^_`{|}~'
