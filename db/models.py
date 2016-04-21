@@ -47,6 +47,11 @@ class NewsTags(models.Model):
     weight = models.DecimalField(max_digits=6, decimal_places=3)
 
 
+class NewsEmotions(models.Model):
+    news = models.ForeignKey(NewsText, on_delete=models.CASCADE)
+    emo_weight = models.DecimalField(max_digits=6, decimal_places=3)
+
+
 class ASources(models.Model):
     site = models.ForeignKey(Site, on_delete=models.CASCADE)
     url = models.URLField(max_length=300)

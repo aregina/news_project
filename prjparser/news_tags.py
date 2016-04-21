@@ -1,4 +1,4 @@
-# import pandas as pd
+import pandas as pd
 from sklearn.linear_model import LogisticRegression
 from sklearn.feature_extraction.text import TfidfVectorizer
 import re
@@ -6,31 +6,31 @@ import pickle
 from math import trunc
 
 
-# def teach():
-#     # Initial data
-#     marked = 505
-#     name_of_column = 'text'  # column with news
-#     text = pd.read_csv('teacher.csv').ix[:marked, 0:6]
-#     # clean text
-#     text[name_of_column] = text[name_of_column].apply(lambda x: re.sub('[^а-яА-Я]', ' ', x.lower()))
-#
-#     # tf-idf
-#     text_train = text.ix[:, name_of_column]
-#     tf = TfidfVectorizer(ngram_range=(1, 1))
-#     algo = tf.fit(text_train)
-#     train = tf.transform(text_train)
-#     tf_file = open('tf.txt', 'br+')
-#     pickle.dump(algo, tf_file)
-#     tf_file.close()
-#     # tags
-#     y = text.ix[:, 'tag']
-#     y = y.fillna('No tag')
-#     lr = LogisticRegression(penalty='l2', C=100)
-#     lr.fit(train, y)
-#
-#     lr_file = open('lr.txt', 'br+')
-#     pickle.dump(lr, lr_file)
-#     lr_file.close()
+def teach():
+    # Initial data
+    marked = 1005
+    name_of_column = 'text'  # column with news
+    text = pd.read_csv('teacher_new.csv').ix[:marked, 0:6]
+    # clean text
+    text[name_of_column] = text[name_of_column].apply(lambda x: re.sub('[^а-яА-Я]', ' ', x.lower()))
+
+    # tf-idf
+    text_train = text.ix[:, name_of_column]
+    tf = TfidfVectorizer(ngram_range=(1, 1))
+    algo = tf.fit(text_train)
+    train = tf.transform(text_train)
+    tf_file = open('tf.txt', 'br+')
+    pickle.dump(algo, tf_file)
+    tf_file.close()
+    # tags
+    y = text.ix[:, 'tag']
+    y = y.fillna('No tag')
+    lr = LogisticRegression(penalty='l2', C=100)
+    lr.fit(train, y)
+
+    lr_file = open('lr.txt', 'br+')
+    pickle.dump(lr, lr_file)
+    lr_file.close()
 
 # teach()
 
