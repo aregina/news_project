@@ -6,11 +6,15 @@ from multiprocessing import Process, Queue
 
 class MultiProc(object):
     end_signal = "end"
+    num_of_write_queue = 300
 
     def __init__(self, process_number=10):
         self.task_queue = Queue()
         self.result_queue = Queue()
         self.process_number = process_number
+
+    def __call__(self):
+        self.run()
 
     def worker(self, parse_obj):
         raise NotImplementedError
@@ -51,20 +55,20 @@ class MultiProc(object):
         for i in range(self.process_number):
             self.task_queue.put(self.end_signal)
 
-    def __check_process(self):
-        status = []
-        for p in self.process_list:
-            status.append(p.is_alive())
-        return any(status)
+    def __is_any_alive_process(self):
+        return any(p.is_alive() for p in self.process_list)
 
-    @transaction.atomic
     def __writer(self, write_function):
-        while not self.result_queue.empty() or self.__check_process():
-            try:
-                result = self.result_queue.get(timeout=0.1)
-            except Empty:
-                continue
-            write_function(result)
+        while not self.result_queue.empty() or self.__is_any_alive_process():
+            with transaction.atomic():
+                # print("task queue {}".format(self.result_queue.qsize()))
+                num = min(self.num_of_write_queue, self.result_queue.qsize())
+                for i in range(num):
+                    try:
+                        result = self.result_queue.get(timeout=0.1)
+                    except Empty:
+                        continue
+                    write_function(result)
 
     def run(self):
         self.__invoke_worker_process(self.worker)

@@ -1,6 +1,6 @@
 from utils import DjangoSetup
 from prjparser import multiproc, key_words
-from db.models import News, KeyWord
+from db.models import News, KeyWord,NewsText
 
 
 class KeyWordsExtractor(multiproc.MultiProc):
@@ -11,9 +11,8 @@ class KeyWordsExtractor(multiproc.MultiProc):
         return news_pk, key_word_list
 
     def task_manager(self):
-        for news in News.objects.iterator():
-            if not news.keyword_set.exists():
-                yield news.pk, news.title, news.newstext.text
+        for news_text in NewsText.objects.filter(is_keywords_extracted=False).iterator():
+            yield news_text.news.pk, news_text.news.title, news_text.text
 
     def writer(self, write_obj):
         news_pk, key_word_list = write_obj
@@ -24,6 +23,8 @@ class KeyWordsExtractor(multiproc.MultiProc):
                 key_word = KeyWord(word=word)
                 key_word.save()
             news = News.objects.get(pk=news_pk)
+            news.newstext.is_keywords_extracted = True
+            news.newstext.save()
             key_word.news.add(news)
 
 

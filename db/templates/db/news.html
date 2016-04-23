@@ -38,5 +38,13 @@
     {% endfor %}
 </ul>
 {% endif %}
+{% if news.newstext.newstags_set.exists %}
+<h3> Tags </h3>
+<ul>
+    {% for tag in news.newstext.newstags_set.all %}
+    <li>{{ tag.tag.tag }} {{ tag.weight }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
 </body>
 </html>

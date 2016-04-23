@@ -1,55 +1,73 @@
-import pandas as pd
-from sklearn.linear_model import LogisticRegression
-from sklearn.feature_extraction.text import TfidfVectorizer
+#import pandas as pd
+#from sklearn.linear_model import LogisticRegression
+#from sklearn.feature_extraction.text import TfidfVectorizer
 import re
 import pickle
+from math import trunc
+#from  pymorphy2 import MorphAnalyzer as MA
 
 
-def teach():
-    # Initial data
-    marked = 505
-    name_of_column = 'text'  # column with news
-    text = pd.read_csv('teacher.csv').ix[:marked, 0:6]
-
-    # clean text
-    text[name_of_column] = text[name_of_column].apply(lambda x: re.sub('[^а-яА-Я]', ' ', x.lower()))
-
-    # tf-idf
-    text_train = text.ix[:, name_of_column]
-    tf = TfidfVectorizer(ngram_range=(1, 1))
-    train = tf.fit_transform(text_train)
-    # tags
-    y = text.ix[:, 'tag']
-    y = y.fillna('No tag')
-
-    lr = LogisticRegression(penalty='l2', C=100)
-    lr.fit(train, y)
-    
-    lr_file = open('lr.txt','br+')
-    pickle.dump(lr, lr_file)
-    lr_file.close()
-
-teach()
+# def teach():
+#     # Initial data
+#     marked = 999
+#     name_of_column = 'text'  # column with news
+#     text = pd.read_csv('teacher_new.csv').ix[:marked, 0:6]
+#     # clean text
+#     text[name_of_column] = text[name_of_column].apply(lambda x: re.sub('[^а-яА-Я]', ' ', x.lower()))
+#
+#     # tf-idf
+#     text_train = text.ix[:, name_of_column]
+#     print(text_train)
+#     for news in text_train:
+#         news_parsed = [MA().parse(word)[0].normal_form for word in news.split()]
+#         sum_news = ''
+#         for i in news_parsed:
+#             sum_news += i + (' ')
+#
+#         print(sum_news)
+#
+#     tf = TfidfVectorizer(ngram_range=(1, 1))
+#     algo = tf.fit(text_train)
+#     train = tf.transform(text_train)
+#     tf_file = open('tf.txt', 'br+')
+#     pickle.dump(algo, tf_file)
+#     tf_file.close()
+#     # tags
+#     y = text.ix[:, 'tag']
+#     y = y.fillna('No tag')
+#     lr = LogisticRegression(penalty='l2', C=100)
+#     lr.fit(train, y)
+#
+#     lr_file = open('lr.txt', 'br+')
+#     pickle.dump(lr, lr_file)
+#     lr_file.close()
+#
+# teach()
 
 
 def get_tags(news):
-    tf = TfidfVectorizer(ngram_range=(1, 1))
+    tf_file = open('prjparser/tf.txt', 'br')
+    tf_pickled = tf_file.read()
+    tf = pickle.loads(tf_pickled)
+    tf_file.close()
+
+    news = [re.sub('[^а-яА-Я]', ' ', news.lower())]
     news_vectorized = tf.transform(news)
-    
+    # for i in zip(news_vectorized.toarray()[0], tf.get_feature_names()):
+    #     print(i)
+
     # take lr algo from file
-    lr_file = open('lr.txt', 'br')
+    lr_file = open('prjparser/lr.txt', 'br')
     lr_pickled = lr_file.read()
     lr = pickle.loads(lr_pickled)
     lr_file.close()
 
     res_proba = lr.predict_proba(news_vectorized)
-    
     top_3_tags = []
-    for probas in res_proba:
-        probas_round = round(probas, 3)
-        cat_and_prob = [pair for pair in zip(probas_round, lr_res.classes_)]
-        cat_and_prob.sort()
-        top_3_tags.append([cat for cat in cat_and_prob[-1:-4:-1] if cat[0] > 0.07])
+
+    cat_and_prob = [pair for pair in zip(res_proba[0], lr.classes_)]
+    cat_and_prob.sort()
+    top_3_tags.append([[trunc(cat[0]*100), cat[1]] for cat in cat_and_prob[-1:-4:-1] if cat[0] > 0.07])
 
     return top_3_tags
 

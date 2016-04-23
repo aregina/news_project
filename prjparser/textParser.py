@@ -5,7 +5,7 @@ import re
 # TODO все переделать нах
 
 def tags_filter_head_and_script(txt):
-    # срезаем  head инорируя регистр(на некоторых сайтах HEAD)
+    # срезаем  head инорируя регистр(на некоторых сайтах HEAD in Upper case)
     head_match = re.search("</\s*?head\s*?>", txt, re.IGNORECASE)
     text = txt[head_match.end():]
     text = html.unescape(text)
@@ -15,7 +15,7 @@ def tags_filter_head_and_script(txt):
 
 def tags_filter(txt):
     t = tags_filter_head_and_script(txt)
-    # должна быть независима от регистра
+    # TODO должна быть независима от регистра
     tags = ["header", "svg", "noscript", "form",
             "nav", "iframe", "footer", "time", "noindex", "style", "abbr", "select", "aside", "figure"]
     for tag in tags:
@@ -39,7 +39,7 @@ def tags_filter(txt):
 
 def count_chars(text_line):
     d, c = 0, 0
-    inTag = False
+    in_tag_brackets = False
     left_bracket = False
     in_a_tag = False
     for char in text_line:
@@ -52,16 +52,16 @@ def count_chars(text_line):
                 in_a_tag = False
         elif char == '<':
             left_bracket = True
-            inTag = True
+            in_tag_brackets = True
         elif char == '>':
-            inTag = False
+            in_tag_brackets = False
         elif char == ' ':
             continue
-        elif inTag:
+        elif in_tag_brackets:
             continue
-        elif not inTag and not in_a_tag:
+        elif not in_tag_brackets and not in_a_tag:
             c += 1
-        elif not inTag and in_a_tag:
+        elif not in_tag_brackets and in_a_tag:
             d += 1
     return d, c
 
@@ -83,7 +83,20 @@ def get_list_of_lines(text):
     return maximum, minimum, cnt
 
 
-def S(text):
+def delete_bad_links(text):
+    """
+    Метод удаляет ссылки с большим количеством тегов <p> внутри текста ссылки
+    Если количество больше 2 - ссылка удаляется.
+    Два и меньше - теги <p> заменяются на пробелы
+    <a>
+        <p>
+        <p>
+        ...
+        <p>
+    </a>
+    :param text:
+    :return:
+    """
     end = 0
     result = ""
     while end < len(text):
@@ -109,7 +122,7 @@ def S(text):
 
 def get_text_from_html(text):
     text = tags_filter(text)
-    text = S(text)
+    text = delete_bad_links(text)
     max_char, min_char, line_list = get_list_of_lines(text)
     text = ""
     '''
@@ -147,9 +160,9 @@ def get_text_from_html(text):
 
 
 def main():
-    import prjparser.urlOpen
+    import urlOpen
 
-    text = prjparser.urlOpen.get_html("http://ria.ru/world/20160330/1400076815.html")
+    text = urlOpen.get_html("http://www.interfax.ru/world/502926")
     text = tags_filter(text)
 
     with open("parsed3.html", mode='w', encoding='utf-8') as file:

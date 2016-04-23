@@ -5,9 +5,10 @@ from prjparser import multiproc
 
 
 class HtmlParser(multiproc.MultiProc):
-    def task_manager(self):
-        for item in News.objects.filter(is_parsed=False)[:].iterator():
-            yield item
+    """
+    Extract news text from html page
+    """
+    task_manager = News.objects.filter(is_parsed=False).iterator
 
     def worker(self, news):
         print(str(news.id) + "     ", end='\n')
@@ -23,20 +24,18 @@ class HtmlParser(multiproc.MultiProc):
 
 
 class NewsTextParser(multiproc.MultiProc):
-    def task_manager(self):
-        for news_text in NewsText.objects.filter(is_parsed=False).iterator():
-            yield news_text
+    """
+    Extract all links from news text
+    """
+
+    task_manager = NewsText.objects.filter(is_parsed=False).iterator
 
     def worker(self, news_text: NewsText):
-        url_list = []
-        for url in aParser.get_a_from_news_text(news_url=news_text.news.url, text=news_text.text):
-            url_list.append(url)
-
-        return [news_text, url_list]
+        url_list = [url for url in aParser.get_a_from_news_text(news_url=news_text.news.url, text=news_text.text)]
+        return news_text, url_list
 
     def writer(self, container):
-        news_text_obj = container[0]
-        url_list = container[1]
+        news_text_obj, url_list = container
         for url in url_list:
             url_in_text = UrlInText.objects.filter(url=url)[:1]
             if url_in_text.exists():
@@ -52,7 +51,7 @@ class NewsTextParser(multiproc.MultiProc):
 
 
 def main():
-    HtmlParser(process_number=20).run()
+    HtmlParser().run()
     NewsTextParser().run()
 
 

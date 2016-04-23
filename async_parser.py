@@ -1,11 +1,11 @@
 from datetime import datetime
 from utils import DjangoSetup
 from db.models import News, RssChannels, ASources
-from prjparser import aParser, rssParser
+from prjparser import aParser, rssParser, model
 from prjparser import multiproc
 
 
-def add_news(news_data):
+def add_news(news_data: model.NewsData) -> News:
     if not News.objects.filter(url=news_data.url)[:1].exists():
         return News.objects.create(site=news_data.site_obj,
                                    title=news_data.title,

@@ -35,7 +35,7 @@ def parse_news_text(news_text: NewsText):
 def main():
 
 
-    parse_news(10)
+    parse_news()
     # for news_text_obj in NewsText.objects.filter(is_parsed=False).iterator():
     #     parse_news_text(news_text_obj)
 
