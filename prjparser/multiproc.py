@@ -6,6 +6,7 @@ from multiprocessing import Process, Queue
 
 class MultiProc(object):
     end_signal = "end"
+    num_of_write_queue = 300
 
     def __init__(self, process_number=10):
         self.task_queue = Queue()
@@ -54,16 +55,14 @@ class MultiProc(object):
         for i in range(self.process_number):
             self.task_queue.put(self.end_signal)
 
-    def __check_process(self):
-        status = []
-        for p in self.process_list:
-            status.append(p.is_alive())
-        return any(status)
+    def __is_any_alive_process(self):
+        return any(p.is_alive() for p in self.process_list)
 
     def __writer(self, write_function):
-        while not self.result_queue.empty() or self.__check_process():
+        while not self.result_queue.empty() or self.__is_any_alive_process():
             with transaction.atomic():
-                num = min(150, self.result_queue.qsize())
+                # print("task queue {}".format(self.result_queue.qsize()))
+                num = min(self.num_of_write_queue, self.result_queue.qsize())
                 for i in range(num):
                     try:
                         result = self.result_queue.get(timeout=0.1)

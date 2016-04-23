@@ -1,7 +1,6 @@
 import re
 import urllib.parse
 from datetime import datetime
-
 from prjparser import urlOpen, textParser, model
 
 
