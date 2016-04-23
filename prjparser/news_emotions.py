@@ -8,7 +8,7 @@ from math import trunc
 
 def teach_emo():
     # Initial data
-    marked = 100
+    marked = 129
     name_of_column = 'text'  # column with news
     text = pd.read_csv('teacher_emo.csv').ix[:marked, 0:4]
     # clean text
@@ -36,7 +36,7 @@ teach_emo()
 
 
 def get_emotions(news):
-    tf_file = open('prjparser/tf_emo.txt', 'br')
+    tf_file = open('tf_emo.txt', 'br')
     tf_pickled = tf_file.read()
     tf = pickle.loads(tf_pickled)
     tf_file.close()
@@ -45,17 +45,19 @@ def get_emotions(news):
     news_vectorized = tf.transform(news)
 
     # take lr algo from file
-    lr_file = open('prjparser/lr_emo.txt', 'br')
+    lr_file = open('lr_emo.txt', 'br')
     lr_pickled = lr_file.read()
     lr = pickle.loads(lr_pickled)
     lr_file.close()
 
     res_proba_of_emo = lr.predict_proba(news_vectorized)
 
-    probability_of_good = res_proba_of_emo[0][0]
+    probability_of_good = res_proba_of_emo[0][1]
+
+    print(lr.classes_)
     print(probability_of_good)
 
     return probability_of_good
 
 if __name__ == "__main__":
-    get_emotions()
+    get_emotions("Любовь построили и победили")

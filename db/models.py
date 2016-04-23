@@ -50,7 +50,7 @@ class NewsTags(models.Model):
 
 class NewsEmotions(models.Model):
     news = models.ForeignKey(NewsText, on_delete=models.CASCADE)
-    emo_weight = models.DecimalField(max_digits=6, decimal_places=3)
+    emo_weight = models.DecimalField(max_digits=5, decimal_places=4)
 
 
 class ASources(models.Model):
