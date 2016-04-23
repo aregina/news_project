@@ -2,7 +2,6 @@ from utils import DjangoSetup
 from sklearn.feature_extraction.text import TfidfVectorizer
 from db.models import NewsText
 from scipy.spatial.distance import cosine
-from prjparser import text_prerparer
 
 
 def get_text(id_news_text):
