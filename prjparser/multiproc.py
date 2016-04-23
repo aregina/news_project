@@ -59,10 +59,17 @@ class MultiProc(object):
         return any(p.is_alive() for p in self.process_list)
 
     def __writer(self, write_function):
+        # TODO in MAC OS NotImplemented queue.qsize()
+        import platform
+        flag = 1 if platform.system() != "Darwin" else 0
         while not self.result_queue.empty() or self.__is_any_alive_process():
             with transaction.atomic():
                 # print("task queue {}".format(self.result_queue.qsize()))
-                num = min(self.num_of_write_queue, self.result_queue.qsize())
+                if flag:
+                    num = min(self.num_of_write_queue, self.result_queue.qsize())
+                else:
+                    num = 10
+                #num = self.num_of_write_queue
                 for i in range(num):
                     try:
                         result = self.result_queue.get(timeout=0.1)
