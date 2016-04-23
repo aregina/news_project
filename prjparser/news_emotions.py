@@ -3,7 +3,6 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.feature_extraction.text import TfidfVectorizer
 import re
 import pickle
-from math import trunc
 from pymorphy2 import MorphAnalyzer as MA
 
 
