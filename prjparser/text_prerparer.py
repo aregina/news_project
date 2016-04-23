@@ -15,6 +15,7 @@ INTERESTING_SPEACH_PARTS = [
     'PRTF',
     'PRTS',
     'GRND',
+    'UNKN',
 ]
 
 
@@ -26,7 +27,7 @@ def text_preparer(text):
     interesting_words_from_news = []
     for word in separated_words:
         parsed_word = MORPH.parse(word)[0]
-        if parsed_word.tag.POS in PUNCTUATION_SIMBOLS:
+        if (parsed_word.tag.POS is None) or parsed_word.tag.POS in INTERESTING_SPEACH_PARTS:
             interesting_words_from_news.append(parsed_word.normal_form)
 
     plain_text = ' '.join(interesting_words_from_news)
