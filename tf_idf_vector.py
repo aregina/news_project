@@ -2,6 +2,7 @@ from utils import DjangoSetup
 from sklearn.feature_extraction.text import TfidfVectorizer
 from db.models import NewsText
 from scipy.spatial.distance import cosine
+from prjparser import text_prerparer
 
 
 def get_text(id_news_text):
@@ -30,10 +31,12 @@ def main():
     tf_idf = TfidfVectorizer(min_df=1)
     tf_idf.fit(big_text.split())
 
-    pivot_news_text_id = 48906
+    pivot_news_text_id = 51465
     print_news_title(pivot_news_text_id)
     for news_text in NewsText.objects.iterator():
-        if compare_news(pivot_news_text_id, news_text.pk, tf_idf) < 0.7:
+        text_similarity = compare_news(pivot_news_text_id, news_text.pk, tf_idf)
+        if text_similarity < 0.7:
+            print(text_similarity)
             print_news_title(news_text.pk)
 
 
