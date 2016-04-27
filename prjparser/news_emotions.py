@@ -6,38 +6,38 @@ import pickle
 from pymorphy2 import MorphAnalyzer as MA
 
 
-def teach_emo():
-    # Initial data
-    marked = 299
-    name_of_column = 'text'  # column with news
-    text = pd.read_csv('teacher_emo.csv').ix[:marked, 0:4]
-    # clean text
-    text[name_of_column] = text[name_of_column].apply(lambda x: re.sub('[^а-яА-Я]', ' ', x.lower()))
-
-    text_train = text.ix[:, name_of_column]
-    morph = MA()
-    for i, news in enumerate(text_train):
-        normalized_news = " ".join([morph.parse(word)[0].normal_form for word in news.split()])
-        text.ix[i, name_of_column] = normalized_news
-        print(i)
-
-    tf = TfidfVectorizer(ngram_range=(1, 1))
-    algo = tf.fit(text_train)
-    train = tf.transform(text_train)
-
-    with open('tf_emo.txt', 'br+') as tf_file:
-        pickle.dump(algo, tf_file)
-
-    # tags
-    y = text.ix[:, 'emo']
-    y = y.fillna('No tag')
-    lr = LogisticRegression(penalty='l2', C=100)
-    lr.fit(train, y)
-
-    with open('lr_emo.txt', 'br+') as lr_file:
-        pickle.dump(algo, lr_file)
-
-teach_emo()
+# def teach_emo():
+#     # Initial data
+#     marked = 299
+#     name_of_column = 'text'  # column with news
+#     text = pd.read_csv('teacher_emo.csv').ix[:marked, 0:4]
+#     # clean text
+#     text[name_of_column] = text[name_of_column].apply(lambda x: re.sub('[^а-яА-Я]', ' ', x.lower()))
+#
+#     text_train = text.ix[:, name_of_column]
+#     morph = MA()
+#     for i, news in enumerate(text_train):
+#         normalized_news = " ".join([morph.parse(word)[0].normal_form for word in news.split()])
+#         text.ix[i, name_of_column] = normalized_news
+#         print(i)
+#
+#     tf = TfidfVectorizer(ngram_range=(1, 1))
+#     algo = tf.fit(text_train)
+#     train = tf.transform(text_train)
+#
+#     with open('tf_emo.txt', 'br+') as tf_file:
+#         pickle.dump(algo, tf_file)
+#
+#     # tags
+#     y = text.ix[:, 'emo']
+#     y = y.fillna('No tag')
+#     lr = LogisticRegression(penalty='l2', C=100)
+#     lr.fit(train, y)
+#
+#     with open('lr_emo.txt', 'br+') as lr_file:
+#         pickle.dump(algo, lr_file)
+#
+# teach_emo()
 
 
 def get_emotions(news):

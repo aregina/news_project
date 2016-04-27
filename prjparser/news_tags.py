@@ -1,43 +1,43 @@
-import pandas as pd
-from sklearn.linear_model import LogisticRegression
-from sklearn.feature_extraction.text import TfidfVectorizer
+# import pandas as pd
+# from sklearn.linear_model import LogisticRegression
+# from sklearn.feature_extraction.text import TfidfVectorizer
 import re
 import pickle
 from math import trunc
-from pymorphy2 import MorphAnalyzer as MA
+# from pymorphy2 import MorphAnalyzer as MA
 
-def teach():
-    # Initial data
-    marked = 999
-    name_of_column = 'text'  # column with news
-    text = pd.read_csv('teacher_new.csv').ix[:marked, 0:6]
-    # clean text
-    text[name_of_column] = text[name_of_column].apply(lambda x: re.sub('[^а-яА-Я]', ' ', x.lower()))
-
-    # tf-idf
-    text_train = text.ix[:, name_of_column]
-    morph = MA()
-    for i, news in enumerate(text_train):
-        normalized_news = " ".join([morph.parse(word)[0].normal_form for word in news.split()])
-        text.ix[i, name_of_column] = normalized_news
-        print(i)
-
-
-    tf = TfidfVectorizer(ngram_range=(1, 1))
-    algo = tf.fit(text_train)
-    train = tf.transform(text_train)
-    with open('tf.txt', 'br+') as tf_file:
-        pickle.dump(algo, tf_file)
-
-    y = text.ix[:, 'tag']
-    y = y.fillna('No tag')
-    lr = LogisticRegression(penalty='l2', C=100)
-    lr.fit(train, y)
-
-    with open('lr.txt', 'br+') as lr_file:
-        pickle.dump(algo, lr_file)
-
-teach()
+# def teach():
+#     # Initial data
+#     marked = 999
+#     name_of_column = 'text'  # column with news
+#     text = pd.read_csv('teacher_new.csv').ix[:marked, 0:6]
+#     # clean text
+#     text[name_of_column] = text[name_of_column].apply(lambda x: re.sub('[^а-яА-Я]', ' ', x.lower()))
+#
+#     # tf-idf
+#     text_train = text.ix[:, name_of_column]
+#     morph = MA()
+#     for i, news in enumerate(text_train):
+#         normalized_news = " ".join([morph.parse(word)[0].normal_form for word in news.split()])
+#         text.ix[i, name_of_column] = normalized_news
+#         print(i)
+#
+#
+#     tf = TfidfVectorizer(ngram_range=(1, 1))
+#     algo = tf.fit(text_train)
+#     train = tf.transform(text_train)
+#     with open('tf.txt', 'br+') as tf_file:
+#         pickle.dump(algo, tf_file)
+#
+#     y = text.ix[:, 'tag']
+#     y = y.fillna('No tag')
+#     lr = LogisticRegression(penalty='l2', C=100)
+#     lr.fit(train, y)
+#
+#     with open('lr.txt', 'br+') as lr_file:
+#         pickle.dump(algo, lr_file)
+#
+# teach()
 
 
 def get_tags(news):
