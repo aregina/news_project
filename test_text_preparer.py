@@ -14,6 +14,7 @@ class AsyncTextPreparer(multiproc.MultiProc):
 
     def worker(self, news_text):
         try:
+            print(news_text.pk)
             text = news_text.text
             refined_text = text_prerparer.text_preparer(text)
             return news_text, refined_text
@@ -22,12 +23,6 @@ class AsyncTextPreparer(multiproc.MultiProc):
 
 
 def main():
-    # news_text = NewsText.objects.get(pk=49000)
-    #
-    # text = news_text.text
-    # print(text)
-    # text = text_prerparer.text_preparer(text)
-    # print(text)
     AsyncTextPreparer().run()
 
 
