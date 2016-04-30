@@ -1,7 +1,7 @@
 # import pandas as pd
 # from sklearn.linear_model import LogisticRegression
 # from sklearn.feature_extraction.text import TfidfVectorizer
-import re
+# import re
 import pickle
 from math import trunc
 from pymorphy2 import MorphAnalyzer as MA
@@ -32,10 +32,10 @@ from pymorphy2 import MorphAnalyzer as MA
 #     y = text.ix[:, 'tag']
 #     # y = y.fillna('No tag')
 #     lr = LogisticRegression(penalty='l2', C=100)
-#     lr_algo = lr.fit(train, y)
+#     lr.fit(train, y)
 #
 #     with open('prjparser/lr.txt', 'br+') as lr_file:
-#         pickle.dump(lr_algo, lr_file)
+#         pickle.dump(lr, lr_file)
 #
 # teach()
 
@@ -46,14 +46,9 @@ def get_tags(news):
         tf = pickle.loads(tf_pickled)
 
     morph = MA()
-    normalized_news = " ".join([morph.parse(word)[0].normal_form for word in news.split()])
-    # news = [re.sub('[^а-яА-Я]', ' ', normalized_news.lower())]
-    # morph = MA()
-    # normalized_news = " ".join([morph.parse(word)[0].normal_form for word in news])
-    #print(news)
+    normalized_news = [" ".join([morph.parse(word)[0].normal_form for word in news.split()])]
     news_vectorized = tf.transform(normalized_news)
 
-    # take lr algo from file
     with open('prjparser/lr.txt', 'br') as lr_file:
         lr_pickled = lr_file.read()
         lr = pickle.loads(lr_pickled)
