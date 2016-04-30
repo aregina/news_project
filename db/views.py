@@ -27,18 +27,19 @@ def tags(request, daily=False):
     return render(request, 'db/tags.html', context)
 
 
-def tag_detail(request, tag=''):
-    tag = tag.split('+')
-    if len(tag) == 1:
-        key_word = get_object_or_404(KeyWord, word=tag[0])
+# TODO переделать на один шаблон
+def tag_detail(request, key_list=''):
+    key_list = key_list.split('+')
+    if len(key_list) == 1:
+        key_word = get_object_or_404(KeyWord, word=key_list[0])
         context = {"key": key_word}
         return render(request, 'db/index.html', context)
     else:
         news = News.objects
-        for key in tag:
+        for key in key_list:
             if not key: continue
             news = news.filter(keyword__word=key)
-        context = {"news_list": news, "key_list": tag}
+        context = {"news_list": news, "key_list": key_list}
     return render(request, 'db/key_list.html', context)
 
 
