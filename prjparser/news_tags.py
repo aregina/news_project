@@ -4,13 +4,13 @@
 import re
 import pickle
 from math import trunc
-# from pymorphy2 import MorphAnalyzer as MA
+from pymorphy2 import MorphAnalyzer as MA
 
 # def teach():
 #     # Initial data
-#     marked = 999
+#     marked = 1004
 #     name_of_column = 'text'  # column with news
-#     text = pd.read_csv('teacher_new.csv').ix[:marked, 0:6]
+#     text = pd.read_csv('prjparser/teacher_new.csv').ix[:marked, 0:6]
 #     # clean text
 #     text[name_of_column] = text[name_of_column].apply(lambda x: re.sub('[^а-яА-Я]', ' ', x.lower()))
 #
@@ -26,16 +26,16 @@ from math import trunc
 #     tf = TfidfVectorizer(ngram_range=(1, 1))
 #     algo = tf.fit(text_train)
 #     train = tf.transform(text_train)
-#     with open('tf.txt', 'br+') as tf_file:
+#     with open('prjparser/tf.txt', 'br+') as tf_file:
 #         pickle.dump(algo, tf_file)
 #
 #     y = text.ix[:, 'tag']
-#     y = y.fillna('No tag')
+#     # y = y.fillna('No tag')
 #     lr = LogisticRegression(penalty='l2', C=100)
-#     lr.fit(train, y)
+#     lr_algo = lr.fit(train, y)
 #
-#     with open('lr.txt', 'br+') as lr_file:
-#         pickle.dump(algo, lr_file)
+#     with open('prjparser/lr.txt', 'br+') as lr_file:
+#         pickle.dump(lr_algo, lr_file)
 #
 # teach()
 
@@ -45,11 +45,15 @@ def get_tags(news):
         tf_pickled = tf_file.read()
         tf = pickle.loads(tf_pickled)
 
-    news = [re.sub('[^а-яА-Я]', ' ', news.lower())]
-    news_vectorized = tf.transform(news)
+    morph = MA()
+    normalized_news = " ".join([morph.parse(word)[0].normal_form for word in news.split()])
+    # news = [re.sub('[^а-яА-Я]', ' ', normalized_news.lower())]
+    # morph = MA()
+    # normalized_news = " ".join([morph.parse(word)[0].normal_form for word in news])
+    #print(news)
+    news_vectorized = tf.transform(normalized_news)
 
     # take lr algo from file
-
     with open('prjparser/lr.txt', 'br') as lr_file:
         lr_pickled = lr_file.read()
         lr = pickle.loads(lr_pickled)
