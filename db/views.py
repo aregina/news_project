@@ -11,9 +11,24 @@ def trivial_abs(value, max_v, min_v):
     return (value - min_v - 0.0) / (max_v - min_v) * (MAX_RETURN - MIN_RETURN) + MIN_RETURN
 
 
+def get_news_list(key: KeyWord):
+    return [{"name": news.title[:10]} for news in key.news.iterator()]
+
+
 def index(request):
+    if 'json' in request.GET:
+        from django.http import JsonResponse
+        news = News.objects.get(pk=3)
+        res_dict = dict()
+        res_dict["name"] = news.title[:20]
+        res_dict["children"] = []
+        for key in news.keyword_set.iterator():
+            child = {"name": key.word, "children":get_news_list(key)}
+            res_dict["children"].append(child)
+        response = JsonResponse(res_dict)
+        return response
     context = {"key": KeyWord.objects.get(word="путин")}
-    return render(request, 'db/index.html', context)
+    return render(request, 'db/d3.html', context)
 
 
 def tags(request, daily=False):
