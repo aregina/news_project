@@ -11,6 +11,7 @@ def emo_define():
         NewsEmotions.objects.create(news=news_text, emo_weight=emo_weight)
         news_text.is_emo_defined = True
         news_text.save()
+        print(emo_weight)
 
 if __name__ == "__main__":
     emo_define()
