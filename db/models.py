@@ -29,6 +29,7 @@ class NewsText(models.Model):
     is_keywords_extracted = models.BooleanField(default=False)
     is_parsed = models.BooleanField(default=False)
     check_tag = models.BooleanField(default=False)
+    is_emo_defined = models.BooleanField(default=False)
 
 
 class KeyWord(models.Model):
@@ -44,6 +45,11 @@ class NewsTags(models.Model):
     news = models.ForeignKey(NewsText, on_delete=models.CASCADE)
     tag = models.ForeignKey(AllTags, on_delete=models.CASCADE)
     weight = models.DecimalField(max_digits=6, decimal_places=3)
+
+
+class NewsEmotions(models.Model):
+    news = models.ForeignKey(NewsText, on_delete=models.CASCADE)
+    emo_weight = models.DecimalField(max_digits=5, decimal_places=4)
 
 
 class ASources(models.Model):
