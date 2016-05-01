@@ -63,14 +63,14 @@ def write_vector():
 
 
 def news_comparer(news_id):
-    news = News.objects.get(pk=news_id)
-    news_v = pickle.loads(news.newsvector.vector)
-    print(news.title)
+    pivot_news = News.objects.get(pk=news_id)
+    pivot_news_vector = pickle.loads(pivot_news.newsvector.vector)
+    print(pivot_news.title)
     for n in News.objects.iterator():
         n_v = pickle.loads(n.newsvector.vector)
         if not n_v.getnnz():
             continue
-        text_similarity = compare_news_vector(news_v, n_v)
+        text_similarity = compare_news_vector(pivot_news_vector, n_v)
         if text_similarity < 0.7:
             print(text_similarity, end="\t")
             print(n.title)
@@ -78,4 +78,4 @@ def news_comparer(news_id):
 
 if __name__ == "__main__":
     # main()
-    news_comparer(50)
+    news_comparer(1)

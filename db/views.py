@@ -18,7 +18,7 @@ def get_news_list(key: KeyWord):
 def index(request):
     if 'json' in request.GET:
         from django.http import JsonResponse
-        news = News.objects.get(pk=3)
+        news = News.objects.get(pk=1)
         res_dict = dict()
         res_dict["name"] = news.title[:20]
         res_dict["children"] = []
