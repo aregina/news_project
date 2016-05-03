@@ -10,14 +10,16 @@ class HtmlParser(multiproc.MultiProc):
     """
     task_manager = News.objects.filter(is_parsed=False).iterator
 
-    def worker(self, news):
+    @staticmethod
+    def worker(news):
         print(str(news.id) + "     ", end='\n')
         html = urlOpen.get_html(news.url)
         if html:
             text = textParser.get_text_from_html(html)
             return NewsText(news=news, text=text)
 
-    def writer(self, news_text):
+    @staticmethod
+    def writer(news_text):
         news_text.save()
         news_text.news.is_parsed = True
         news_text.news.save()
@@ -30,11 +32,13 @@ class NewsTextParser(multiproc.MultiProc):
 
     task_manager = NewsText.objects.filter(is_parsed=False).iterator
 
-    def worker(self, news_text: NewsText):
+    @staticmethod
+    def worker(news_text: NewsText):
         url_list = [url for url in aParser.get_a_from_news_text(news_url=news_text.news.url, text=news_text.text)]
         return news_text, url_list
 
-    def writer(self, container):
+    @staticmethod
+    def writer(container):
         news_text_obj, url_list = container
         for url in url_list:
             url_in_text = UrlInText.objects.filter(url=url)[:1]

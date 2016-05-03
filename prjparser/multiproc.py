@@ -16,13 +16,16 @@ class MultiProc(object):
     def __call__(self):
         self.run()
 
-    def worker(self, parse_obj):
+    @staticmethod
+    def worker(parse_obj):
         raise NotImplementedError
 
-    def task_manager(self):
+    @staticmethod
+    def task_manager():
         raise NotImplementedError
 
-    def writer(self, write_obj):
+    @staticmethod
+    def writer(write_obj):
         raise NotImplementedError
 
     def __invoke_worker_process(self, worker_function):

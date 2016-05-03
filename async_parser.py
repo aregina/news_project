@@ -15,7 +15,8 @@ def add_news(news_data: model.NewsData) -> News:
 
 
 class RssParser(multiproc.MultiProc):
-    def writer(self, container):
+    @staticmethod
+    def writer(container):
         n = 0
         rss, news_list = container
         for news in news_list:
@@ -24,7 +25,8 @@ class RssParser(multiproc.MultiProc):
         if n:
             print("[{}] {} news add from {} {}".format(datetime.now(), n, rss, rss.site.name))
 
-    def worker(self, rss: RssChannels):
+    @staticmethod
+    def worker(rss: RssChannels):
         news_list = []
         for news in rssParser.parse(rss.url):
             news.site_obj = rss.site
@@ -36,7 +38,8 @@ class RssParser(multiproc.MultiProc):
 
 
 class ASourceParser(multiproc.MultiProc):
-    def writer(self, container):
+    @staticmethod
+    def writer(container):
         n = 0
         a_source, news_list = container
         for news in news_list:
@@ -45,7 +48,8 @@ class ASourceParser(multiproc.MultiProc):
         if n:
             print("[{}] {} news add from {} {}".format(datetime.now(), n, a_source, a_source.site.name))
 
-    def worker(self, source: ASources):
+    @staticmethod
+    def worker(source: ASources):
         news_list = []
         for news in aParser.parse(source.url):
             news.site_obj = source.site
