@@ -5,7 +5,7 @@ django.setup()
 
 from db.models import Site, RssChannels, ASources
 
-# TODO выделить в отдельный файл м.б. json
+#TODO выделить в отдельный файл м.б. json
 news_dict = {"lenta.ru": ["http://www.lenta.ru/rss", ],
              "tass.ru": ["http://tass.ru/rss/v2.xml"],
              "rbc.ru": ["http://static.feed.rbc.ru/rbc/internal/rss.rbc.ru/rbc.ru/mainnews.rss"],
