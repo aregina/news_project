@@ -40,9 +40,9 @@ def get_tags(news):
         tf_pickled = tf_file.read()
         tf = pickle.loads(tf_pickled)
 
-    morph = MA()
-    normalized_news = [" ".join([morph.parse(word)[0].normal_form for word in news.split()])]
-    news_vectorized = tf.transform(normalized_news)
+    # morph = MA()
+    # normalized_news = [" ".join([morph.parse(word)[0].normal_form for word in news.split()])]
+    news_vectorized = tf.transform([news])
 
     with open('prjparser/lr.txt', 'br') as lr_file:
         lr_pickled = lr_file.read()
