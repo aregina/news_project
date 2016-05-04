@@ -1,8 +1,9 @@
 from utils import DjangoSetup  # setup django environment
 from db.models import News, NewsText, UrlInText
 from prjparser import textParser, urlOpen, aParser
-from prjparser import multiproc
+from prjparser import multiproc, text_prerparer
 
+# TODO надо объеденить классы или както переделеть логику
 
 class HtmlParser(multiproc.MultiProc):
     """
@@ -54,10 +55,30 @@ class NewsTextParser(multiproc.MultiProc):
         print("news_text_id {}".format(news_text_obj.pk))
 
 
+class AsyncTextPreparer(multiproc.MultiProc):
+    task_manager = NewsText.objects.iterator
+
+    @staticmethod
+    def writer(write_obj):
+        news_text, refined_text = write_obj
+        news_text.text = refined_text
+        news_text.save()
+
+    @staticmethod
+    def worker(news_text):
+        try:
+            print(news_text.pk)
+            text = news_text.text
+            refined_text = text_prerparer.text_preparer(text)
+            return news_text, refined_text
+        except:
+            print(news_text)
+
+
 def main():
     HtmlParser().run()
     NewsTextParser().run()
-
+    AsyncTextPreparer().run()
 
 if __name__ == "__main__":
     main()
