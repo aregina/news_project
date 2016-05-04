@@ -23,12 +23,12 @@ def index(request):
         res_dict["name"] = news.title[:20]
         res_dict["children"] = []
         for key in news.keyword_set.iterator():
-            child = {"name": key.word, "children":get_news_list(key)}
+            child = {"name": key.word, "children": get_news_list(key)}
             res_dict["children"].append(child)
         response = JsonResponse(res_dict)
         return response
     context = {"key": KeyWord.objects.get(word="путин")}
-    return render(request, 'db/d3.html', context)
+    return render(request, 'db/d3_2.html', context)
 
 
 def tags(request, daily=False):
