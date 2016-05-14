@@ -42,7 +42,7 @@ var margin = {top: 20, right: 50, bottom: 30, left: 50},
     width = 960 - margin.left - margin.right,
     height = 500 - margin.top - margin.bottom;
 
-var parseDate = d3.time.format("%Y-%W-%w-%H").parse,
+var parseDate = d3.time.format("%Y-%m-%d-%H").parse,
     bisectDate = d3.bisector(function(d) { return d.y; }).left,
     formatValue = d3.format(",.2f"),
     formatCurrency = function(d) { return formatValue(d); };
@@ -71,7 +71,7 @@ var svg = d3.select("body").append("svg")
   .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-d3.json("/static/db/js.json", function(error, data) {
+d3.json("?json1", function(error, data) {
   if (error) throw error;
 
   data.forEach(function(d) {

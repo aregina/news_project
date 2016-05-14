@@ -1,6 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 from db.models import *
 from django.db.models import Count, Max, Min, F, DecimalField, ExpressionWrapper
+from django.http import JsonResponse, HttpResponse
 
 MAX_RETURN = 5
 MIN_RETURN = 1
@@ -17,7 +18,6 @@ def get_news_list(key: KeyWord):
 
 def index(request):
     if 'json' in request.GET:
-        from django.http import JsonResponse
         news = News.objects.get(pk=1)
         res_dict = dict()
         res_dict["name"] = news.title[:20]
@@ -27,7 +27,16 @@ def index(request):
             res_dict["children"].append(child)
         response = JsonResponse(res_dict)
         return response
-    context = {"key": KeyWord.objects.get(word="путин")}
+    if 'json1' in request.GET:
+        from django.db.models import Count
+        from datetime import datetime
+        news = News.objects\
+            .extra({'y': 'strftime("%Y-%m-%d-%H",pub_date)'}) \
+            .values('y') \
+            .annotate(cnt=Count('pub_date'))
+        return JsonResponse([n for n in news if "2016-04-24-02" < n['y']<"2016-05-01-02"], safe=False)
+    # context = {"key": KeyWord.objects.get(word="путин")}
+    context = {}
     return render(request, 'db/d3_2.html', context)
 
 
