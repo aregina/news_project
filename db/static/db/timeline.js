@@ -97,7 +97,6 @@ d3.json("/?json2", function (error, jData) {
                 .ease("elastic")
                 .attr("transform", "translate(0," + mouseDelta + ")");
             var n_id = Math.abs(Math.floor(mouseDelta / 15));
-            console.log(n_id);
             text_prev.text(getText(n_id - 1));
             text.text(getText(n_id));
             text_post.text(getText(n_id + 1));
