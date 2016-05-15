@@ -16,6 +16,10 @@ def get_news_list(key: KeyWord):
     return [{"name": news.title[:10]} for news in key.news.iterator()]
 
 
+def test_index(request):
+    return render(request, "db/index2.html", {})
+
+
 def index(request):
     if 'json' in request.GET:
         news = News.objects.get(pk=1)
@@ -29,12 +33,27 @@ def index(request):
         return response
     if 'json1' in request.GET:
         from django.db.models import Count
-        from datetime import datetime
-        news = News.objects\
+        news = News.objects \
             .extra({'y': 'strftime("%Y-%m-%d-%H",pub_date)'}) \
             .values('y') \
             .annotate(cnt=Count('pub_date'))
-        return JsonResponse([n for n in news if "2016-04-24-02" < n['y']<"2016-05-01-02"], safe=False)
+        return JsonResponse([n for n in news if "2016-04-24-02" < n['y'] < "2016-05-01-02"], safe=False)
+    if 'json2' in request.GET:
+        from django.db.models import Count
+        from datetime import date
+        news = News.objects \
+            .extra({'y': 'strftime("%Y-%m-%d",pub_date)'}) \
+            .values('y') \
+            .annotate(cnt=Count('pub_date')) \
+            .annotate(i=Min('id'))
+
+        resp_dict = list()
+        for n in news:
+            first_day_news = News.objects.get(id=n['i'])
+            n["n"] = first_day_news.title
+            resp_dict.append(n)
+
+        return JsonResponse(resp_dict, safe=False)
     # context = {"key": KeyWord.objects.get(word="путин")}
     context = {}
     return render(request, 'db/d3_2.html', context)
