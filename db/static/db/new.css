@@ -54,9 +54,23 @@ svg rect {
     stroke:  #646464;
     stroke-width: 2;
     fill:white;
-    fill-opacity: 0.7;
+    fill-opacity: 0.9;
 }
 
 .shadow {
     opacity: 0.5;
+}
+
+.title {
+    color: #00173e;
+    font-family: "Roboto Slab";
+    font-size: 1em;
+    fill: #00173e;
+}
+
+.date {
+    color: #00173e;
+    font-family: "Roboto Slab";
+    font-size: 1em;
+    fill: #00173e;
 }

@@ -32,20 +32,21 @@ d3.json("/?json2", function (error, jData) {
         return a.y - b.y;
     });
     var options = {
-        year: 'numeric',
+        //year: 'numeric',
         month: 'long',
         day: 'numeric'
     };
 
     cont = container
         .append("text")
+        .attr("class", "date")
         .selectAll("tspan")
         .data(jData)
         .enter()
         .append("tspan")
-        .attr("x", "30%")
+        .attr("x", "40%")
         .attr("y", function (d, i) { return i * 25 + "px" })
-        .text(function (d) { return d.y.toLocaleString("ru", options) });
+        .text(function (d, i) { return i % 5 ? " " : d.y.toLocaleString("ru", options) });
 
     grap = container
         .selectAll("rect")
@@ -66,20 +67,22 @@ d3.json("/?json2", function (error, jData) {
         .attr("ry", "5");
 
     var text_prev = svg.append("text")
-        .attr('class', "shadow")
+        .attr('class', "title shadow")
         .attr("x", "40%")
         .attr("y", "55%");
 
     var text = svg.append("text")
+        .attr("class", "title")
         .attr("x", "40%")
         .attr("y", "60%");
 
     var text_post = svg.append("text")
-        .attr('class', "shadow")
+        .attr('class', "title shadow")
         .attr("x", "40%")
         .attr("y", "65%");
 
     function getText(id) {
+        if (id < 0 || id >= grap[0].length) return " ";
         var n_text = grap[0][id].__data__.n;
         return n_text.length > 20 ? n_text.substring(0, 35) + "..." : n_text;
     }
@@ -94,6 +97,7 @@ d3.json("/?json2", function (error, jData) {
                 .ease("elastic")
                 .attr("transform", "translate(0," + mouseDelta + ")");
             var n_id = Math.abs(Math.floor(mouseDelta / 15));
+            console.log(n_id);
             text_prev.text(getText(n_id - 1));
             text.text(getText(n_id));
             text_post.text(getText(n_id + 1));
