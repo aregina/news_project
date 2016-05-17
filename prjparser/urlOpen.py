@@ -3,6 +3,7 @@ import urllib.error
 
 
 # TODO problem with "http://www.interfax.ru/world/502926"
+# TODO raise 404 error(сообщать о недоступности ссылки для доп аналитики удаленных новостей)
 def get_html(url):
     try:
         with u.urlopen(url) as request:

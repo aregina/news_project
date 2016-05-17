@@ -3,6 +3,7 @@ from db.models import News, NewsText, UrlInText
 from prjparser import textParser, urlOpen, aParser
 from prjparser import multiproc, text_prerparer
 
+
 # TODO надо объеденить классы или както переделеть логику
 
 class HtmlParser(multiproc.MultiProc):
@@ -54,7 +55,8 @@ class NewsTextParser(multiproc.MultiProc):
         news_text_obj.save()
         print("news_text_id {}".format(news_text_obj.pk))
 
-# TODO брать только тексты где ссылки выделны. Устновить флаг для защиты от повторной работы 
+
+# TODO брать только тексты где ссылки выделны. Устновить флаг для защиты от повторной работы
 class AsyncTextPreparer(multiproc.MultiProc):
     task_manager = NewsText.objects.iterator
 
@@ -79,6 +81,7 @@ def main():
     HtmlParser().run()
     NewsTextParser().run()
     AsyncTextPreparer().run()
+
 
 if __name__ == "__main__":
     main()
