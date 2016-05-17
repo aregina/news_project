@@ -54,7 +54,7 @@ class NewsTextParser(multiproc.MultiProc):
         news_text_obj.save()
         print("news_text_id {}".format(news_text_obj.pk))
 
-
+# TODO брать только тексты где ссылки выделны. Устновить флаг для защиты от повторной работы 
 class AsyncTextPreparer(multiproc.MultiProc):
     task_manager = NewsText.objects.iterator
 
