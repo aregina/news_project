@@ -30,7 +30,7 @@ class MultiProc(object):
 
     def __invoke_worker_process(self, worker_function):
         process_list = []
-        for i in range(self.process_number):
+        for _ in range(self.process_number):
             p = Process(target=self.__worker_process, args=(worker_function,))
             p.start()
             process_list.append(p)
@@ -55,7 +55,7 @@ class MultiProc(object):
         for task in task_function():
             self.task_queue.put(task)
         # generate end signal
-        for i in range(self.process_number):
+        for _ in range(self.process_number):
             self.task_queue.put(self.end_signal)
 
     def __is_any_alive_process(self):
@@ -64,11 +64,11 @@ class MultiProc(object):
     def __writer(self, write_function):
         # TODO in MAC OS NotImplemented queue.qsize()
         import platform
-        flag = 1 if platform.system() != "Darwin" else 0
+        is_mac_os = True if platform.system() == "Darwin" else False
         while not self.result_queue.empty() or self.__is_any_alive_process():
             with transaction.atomic():
                 # print("task queue {}".format(self.result_queue.qsize()))
-                if flag:
+                if not is_mac_os:
                     num = min(self.num_of_write_queue, self.result_queue.qsize())
                 else:
                     num = 10

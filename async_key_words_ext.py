@@ -19,16 +19,17 @@ class KeyWordsExtractor(multiproc.MultiProc):
     @staticmethod
     def writer(write_obj):
         news_pk, key_word_list = write_obj
+        news = News.objects.get(pk=news_pk)
+        print("pk {} write".format(news_pk))
         for word in key_word_list:
             try:
                 key_word = KeyWord.objects.get(word=word)
             except KeyWord.DoesNotExist:
                 key_word = KeyWord(word=word)
                 key_word.save()
-            news = News.objects.get(pk=news_pk)
-            news.newstext.is_keywords_extracted = True
-            news.newstext.save()
             key_word.news.add(news)
+        news.newstext.is_keywords_extracted = True
+        news.newstext.save()
 
 
 def main():
