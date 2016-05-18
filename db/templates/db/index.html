@@ -18,6 +18,8 @@
     </style>
 </head>
 <body>
+{% load staticfiles %}
+<a href="{% static 'db/img/r.txt' %}">txt</a>
 <h2>{{ key.news.count }}</h2>
 <h1>{{ key.word }}</h1>
 <ul>

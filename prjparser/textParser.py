@@ -10,16 +10,16 @@ def tags_filter_head_and_script(txt):
     text = txt[head_match.end():]
     text = html.unescape(text)
     tag = "script"
-    return re.sub("<\s*?{0}.*?>(.|\s)*?</\s*?{0}\s*?>".format(tag), " ", text)
+    return re.sub("<\s*?{0}.*?>(.|\s)*?</\s*?{0}\s*?>".format(tag), " ", text, flags=re.I)
 
 
 def tags_filter(txt):
     t = tags_filter_head_and_script(txt)
     # TODO должна быть независима от регистра
-    tags = ["header", "svg", "noscript", "form",
-            "nav", "iframe", "footer", "time", "noindex", "style", "abbr", "select", "aside", "figure"]
+    tags = ["style", "header", "svg", "noscript", "form",
+            "nav", "footer", "time", "noindex",  "abbr", "select", "aside", "figure"]
     for tag in tags:
-        t = re.sub("<\s*?{0}.*?>(.|\s)*?</\s*?{0}\s*?>".format(tag), " ", t)
+        t = re.sub("<\s*?{0}.*?>(.|\s)*?</\s*?{0}\s*?>".format(tag), " ", t, flags=re.I)
 
     t = re.sub("style.?=.?\"(.|\s)*?\"", " ", t)
     t = re.sub("class.?=.?\"(.|\s)*?\"", " ", t)
@@ -33,6 +33,7 @@ def tags_filter(txt):
     t = re.sub("<\s*?/?(article|font|table|tr|td|div|h1|h2|h3|h4|span|ul|li|ol|label|section)(.|\s)*?>",
                "<p>", t)
     t = re.sub("</?(i|u|b|strong|em)(.|\s)*?>", " ", t)
+    t = re.sub("<\s*?iframe.*?>(.|\s)*?</\s*?iframe\s*?>", " ", t, flags=re.I)
 
     return t
 
@@ -187,4 +188,15 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    # main()
+    import urlOpen
+
+    html_code = urlOpen.get_html("http://ria.ru/world/20160406/1403678547.html")
+    if html_code:
+        with open("parsed2.html", mode='w', encoding='utf-8') as file:
+            file.write(tags_filter_head_and_script(html_code))
+
+        text = get_text_from_html(html_code)
+
+        with open("parsed3.html", mode='w', encoding='utf-8') as file:
+            file.write(text)

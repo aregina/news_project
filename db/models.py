@@ -32,7 +32,6 @@ class NewsText(models.Model):
     is_emo_defined = models.BooleanField(default=False)
 
 
-
 class KeyWord(models.Model):
     news = models.ManyToManyField(News)
     word = models.CharField(max_length=300)
@@ -62,3 +61,12 @@ class UrlInText(models.Model):
     news = models.ManyToManyField(
         News)
     url = models.URLField(max_length=300, db_index=True)
+
+
+class NewsVector(models.Model):
+    news = models.OneToOneField(
+        News,
+        on_delete=models.CASCADE,
+        primary_key=True,
+    )
+    vector = models.BinaryField(null=True)
