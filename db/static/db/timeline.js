@@ -42,6 +42,8 @@ d3.json("/?json2", function (error, jData) {
     jData.sort(function (a, b) {
         return a.y - b.y;
     });
+    
+    jData.reverse();
 
     rect_width = d3.scale
         .linear()
