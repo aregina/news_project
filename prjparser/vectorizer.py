@@ -76,6 +76,27 @@ def news_comparer(news_id):
             print(vector.news.title)
 
 
+
+def get_pickled_vector(text):
+    vector = tf_idf_var.transform([text])
+    return pickle.dumps(vector)
+
+
+def make_tf_idf_file():
+    big_text = get_big_text()
+    tf_idf = get_tf_idf(big_text)
+    with open("tf_idf_vectorizer.bin", "wb") as file:
+        file.write(pickle.dumps(tf_idf))
+
+
+def open_tf_idf_file():
+    f = open("prjparser/tf_idf_vectorizer.bin", "rb").read()
+    return pickle.loads(f)
+
+
+tf_idf_var = open_tf_idf_file()
+
 if __name__ == "__main__":
+    pass
     # main()
-    news_comparer(3)
+    # news_comparer(3)

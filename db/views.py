@@ -62,7 +62,7 @@ def index(request):
 def tags(request, daily=False):
     key_query = KeyWord.objects
     if daily:
-        key_query = key_query.filter(news__pub_date__day=3)
+        key_query = key_query.filter(news__pub_date__day=15, news__pub_date__month=5)
     key_query = key_query.annotate(cnt=Count('news')).filter(cnt__gt=20)
     key_range = key_query.aggregate(max=Max('cnt'), min=Min('cnt'))
     context = {"key": key_query.annotate(cnt_n=ExpressionWrapper(

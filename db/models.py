@@ -30,6 +30,7 @@ class NewsText(models.Model):
     is_parsed = models.BooleanField(default=False)
     check_tag = models.BooleanField(default=False)
     is_emo_defined = models.BooleanField(default=False)
+    is_vectorized = models.BooleanField(default=False)
 
 
 class KeyWord(models.Model):
