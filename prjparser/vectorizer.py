@@ -66,15 +66,18 @@ def news_comparer(news_id):
     pivot_news = News.objects.get(pk=news_id)
     pivot_news_vector = pickle.loads(pivot_news.newsvector.vector)
     print(pivot_news.title)
-    for vector in NewsVector.objects.iterator():
-        news_vector = pickle.loads(vector.vector)
-        if not news_vector.getnnz():
+    count = 0
+    for news_vector in NewsVector.objects.filter().iterator():
+        vector = pickle.loads(news_vector.vector)
+        if not vector.getnnz():
             continue
-        text_similarity = compare_news_vector(pivot_news_vector, news_vector)
-        if text_similarity < 0.7:
+        text_similarity = compare_news_vector(pivot_news_vector, vector)
+        if text_similarity < 0.75:
+            count += 1
             print(text_similarity, end="\t")
-            print(vector.news.title)
-
+            print(news_vector.news.pk, end="\t")
+            print(news_vector.news.title)
+    print(count)
 
 
 def get_pickled_vector(text):
@@ -94,9 +97,8 @@ def open_tf_idf_file():
     return pickle.loads(f)
 
 
-tf_idf_var = open_tf_idf_file()
-
 if __name__ == "__main__":
-    pass
     # main()
-    # news_comparer(3)
+    news_comparer(64003)
+else:
+    tf_idf_var = open_tf_idf_file()

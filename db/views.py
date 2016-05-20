@@ -40,7 +40,6 @@ def index(request):
         return JsonResponse([n for n in news if "2016-04-24-02" < n['y'] < "2016-05-01-02"], safe=False)
     if 'json2' in request.GET:
         from django.db.models import Count
-        from datetime import date
         news = News.objects \
             .extra({'y': 'strftime("%Y-%m-%d",pub_date)'}) \
             .values('y') \
@@ -63,7 +62,7 @@ def tags(request, daily=False):
     key_query = KeyWord.objects
     if daily:
         key_query = key_query.filter(news__pub_date__day=15, news__pub_date__month=5)
-    key_query = key_query.annotate(cnt=Count('news')).filter(cnt__gt=20)
+    key_query = key_query.annotate(cnt=Count('news')).filter(cnt__gt=500)
     key_range = key_query.aggregate(max=Max('cnt'), min=Min('cnt'))
     context = {"key": key_query.annotate(cnt_n=ExpressionWrapper(
         trivial_abs(F('cnt'), key_range['max'], key_range['min']), output_field=DecimalField(decimal_places=1)))}
