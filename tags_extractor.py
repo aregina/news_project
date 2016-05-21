@@ -15,7 +15,7 @@ def tags_create():
                 except AllTags.DoesNotExist:
                     tag_from_db = AllTags.objects.create(tag=tag_text)
                 print(weight, tag_from_db.tag)
-                NewsTags.objects.create(news=news_text, weight=weight, tag=tag_from_db)
+                NewsTags.objects.create(news=news_text.text, weight=weight, tag=tag_from_db)
 
         news_text.check_tag = True
         news_text.save()
