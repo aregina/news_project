@@ -8,7 +8,7 @@ from django.db import transaction
 def emo_define():
     for news_text in NewsText.objects.filter(is_emo_defined=False).iterator():
         emo_weight = news_emotions.get_emotions(news_text.text)
-        NewsEmotions.objects.create(news=news_text.text, emo_weight=emo_weight)
+        NewsEmotions.objects.create(news=news_text, emo_weight=emo_weight)
         news_text.is_emo_defined = True
         news_text.save()
         print(emo_weight)

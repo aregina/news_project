@@ -35,19 +35,24 @@ from pymorphy2 import MorphAnalyzer as MA
 #
 # teach_emo()
 
+with open('prjparser/tf_emo.txt', 'br') as tf_file:
+    tf_pickled = tf_file.read()
+    tf = pickle.loads(tf_pickled)
+
+with open('prjparser/lr_emo.txt', 'br') as lr_file:
+    lr_pickled = lr_file.read()
+    lr = pickle.loads(lr_pickled)
 
 def get_emotions(news):
-    with open('prjparser/tf_emo.txt', 'br') as tf_file:
-        tf_pickled = tf_file.read()
-        tf = pickle.loads(tf_pickled)
+    # with open('prjparser/tf_emo.txt', 'br') as tf_file:
+    #     tf_pickled = tf_file.read()
+    #     tf = pickle.loads(tf_pickled)
 
-    # morph = MA()
-    # normalized_news = [" ".join([morph.parse(word)[0].normal_form for word in news.split()])]
     news_vectorized = tf.transform([news])
 
-    with open('prjparser/lr_emo.txt', 'br') as lr_file:
-        lr_pickled = lr_file.read()
-        lr = pickle.loads(lr_pickled)
+    # with open('prjparser/lr_emo.txt', 'br') as lr_file:
+    #     lr_pickled = lr_file.read()
+    #     lr = pickle.loads(lr_pickled)
 
     res_proba_of_emo = lr.predict_proba(news_vectorized)
     probability_of_good = res_proba_of_emo[0][1]
@@ -55,4 +60,12 @@ def get_emotions(news):
     return probability_of_good
 
 if __name__ == "__main__":
-    get_emotions()
+    pass
+else:
+    with open('prjparser/tf.txt', 'br') as tf_file:
+        tf_pickled = tf_file.read()
+        tf = pickle.loads(tf_pickled)
+
+    with open('prjparser/lr.txt', 'br') as lr_file:
+        lr_pickled = lr_file.read()
+        lr = pickle.loads(lr_pickled)
