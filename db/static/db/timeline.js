@@ -3,10 +3,11 @@ var isMouseClick = false,
     startPosition = 0,
     lastMouseDelta = 0,
     parseDate = d3.time.format("%Y-%m-%d").parse;
-    
+
 const elementHeight = 25;
 const linePosition = 50;
 const dateDistanse = 5;
+const graphWidth = (100-linePosition)-10
 
 
 var svg = d3.select(".timeline").append("svg")
@@ -42,12 +43,12 @@ d3.json("/?json2", function (error, jData) {
     jData.sort(function (a, b) {
         return a.y - b.y;
     });
-    
+
     jData.reverse();
 
     rect_width = d3.scale
         .linear()
-        .range([5, 45])
+        .range([1, graphWidth])
         .domain(d3.extent(jData, function (d) { return d.cnt; }));
 
     var options = {
@@ -63,7 +64,7 @@ d3.json("/?json2", function (error, jData) {
         .data(jData)
         .enter()
         .append("tspan")
-        .attr("x", "40%")
+        .attr("x", (linePosition-10)+"%")
         .attr("y", function (d, i) { return i * elementHeight + "px" })
         .text(function (d, i) { return i % dateDistanse ? " " : d.y.toLocaleString("ru", options) });
 
@@ -126,7 +127,7 @@ d3.json("/?json2", function (error, jData) {
                 .duration(1500)
                 .ease("elastic")
                 .attr("transform", "translate(0," + mouseDelta + ")");
-            var n_id = Math.floor(mouseDelta / elementHeight)*-1;
+            var n_id = Math.floor(mouseDelta / elementHeight) * -1;
             text_prev.text(getText(n_id - 1));
             text.text(getText(n_id));
             text_post.text(getText(n_id + 1));

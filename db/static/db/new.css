@@ -1,5 +1,6 @@
 * {
    margin: 0;
+
 }
 .main {
     height: 100vh;
@@ -80,4 +81,24 @@ svg rect {
 .link {
     text-decoration: none;   
     color: #00173e; 
+}
+
+.container {
+    height: 100%;
+    width: 80%;
+    margin: auto;
+}
+
+.news {
+    background-color: blue;
+    display: block;
+    float: left;
+    height: 100%;
+    width: 70%;
+}
+.svg {
+    display: block;
+    float: left;
+    height: 100%;
+    width: 30%;
 }

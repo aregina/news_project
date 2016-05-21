@@ -89,3 +89,9 @@ def news_detail(request, news_id=0):
     news = get_object_or_404(News, pk=news_id)
     context = {"news": news}
     return render(request, 'db/news.html', context)
+
+
+def new_news_detail(request, news_id=0):
+    news = get_object_or_404(News, pk=news_id)
+    context = {"news": news}
+    return render(request, 'db/news2.html', context)
