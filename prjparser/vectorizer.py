@@ -72,8 +72,9 @@ def news_comparer(news_id):
         if not vector.getnnz():
             continue
         text_similarity = compare_news_vector(pivot_news_vector, vector)
-        if text_similarity < 0.75:
+        if text_similarity < 0.71:
             count += 1
+            news_vector.news.related_news.add(pivot_news)
             print(text_similarity, end="\t")
             print(news_vector.news.pk, end="\t")
             print(news_vector.news.title)
@@ -99,6 +100,6 @@ def open_tf_idf_file():
 
 if __name__ == "__main__":
     # main()
-    news_comparer(64003)
+    news_comparer(5)
 else:
     tf_idf_var = open_tf_idf_file()

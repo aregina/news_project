@@ -59,12 +59,13 @@ d3.json("/?json2", function (error, jData) {
 
     pubDate = container
         .append("text")
+        .attr("text-anchor","end")
         .attr("class", "date")
         .selectAll("tspan")
         .data(jData)
         .enter()
         .append("tspan")
-        .attr("x", (linePosition-10)+"%")
+        .attr("x", (linePosition-1)+"%")
         .attr("y", function (d, i) { return i * elementHeight + "px" })
         .text(function (d, i) { return i % dateDistanse ? " " : d.y.toLocaleString("ru", options) });
 

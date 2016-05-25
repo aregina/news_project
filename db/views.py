@@ -92,6 +92,17 @@ def news_detail(request, news_id=0):
 
 
 def new_news_detail(request, news_id=0):
+    if 'json' in request.GET:
+        news = News.objects.get(pk=news_id)
+        # resp_dict = list()
+        # for n in News.related_news.iterator():
+        #     di = dict()
+        #
+        #     first_day_news = News.objects.get(id=n['i'])
+        #     n["n"] = first_day_news.title
+        #     resp_dict.append(n)
+
+        return JsonResponse([{"id": n.pk, "date": n.pub_date} for n in news.related_news.iterator()], safe=False)
     news = get_object_or_404(News, pk=news_id)
     context = {"news": news}
     return render(request, 'db/news2.html', context)
