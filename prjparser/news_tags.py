@@ -36,17 +36,17 @@ from pymorphy2 import MorphAnalyzer as MA
 
 
 def get_tags(news):
-    with open('prjparser/tf.txt', 'br') as tf_file:
-        tf_pickled = tf_file.read()
-        tf = pickle.loads(tf_pickled)
+    # with open('prjparser/tf.txt', 'br') as tf_file:
+    #     tf_pickled = tf_file.read()
+    #     tf = pickle.loads(tf_pickled)
 
     # morph = MA()
     # normalized_news = [" ".join([morph.parse(word)[0].normal_form for word in news.split()])]
     news_vectorized = tf.transform([news])
 
-    with open('prjparser/lr.txt', 'br') as lr_file:
-        lr_pickled = lr_file.read()
-        lr = pickle.loads(lr_pickled)
+    # with open('prjparser/lr.txt', 'br') as lr_file:
+    #     lr_pickled = lr_file.read()
+    #     lr = pickle.loads(lr_pickled)
 
     res_proba = lr.predict_proba(news_vectorized)
     top_3_tags = []
@@ -58,4 +58,12 @@ def get_tags(news):
     return top_3_tags
 
 if __name__ == "__main__":
-    get_tags()
+    pass
+else:
+    with open('prjparser/tf.txt', 'br') as tf_file:
+        tf_pickled = tf_file.read()
+        tf = pickle.loads(tf_pickled)
+
+    with open('prjparser/lr.txt', 'br') as lr_file:
+        lr_pickled = lr_file.read()
+        lr = pickle.loads(lr_pickled)
