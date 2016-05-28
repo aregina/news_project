@@ -55,7 +55,7 @@ def get_emotions(news):
     #     lr = pickle.loads(lr_pickled)
 
     res_proba_of_emo = lr.predict_proba(news_vectorized)
-    probability_of_good = res_proba_of_emo[0][1]
+    probability_of_good = res_proba_of_emo[0][1]*100
 
     return probability_of_good
 
