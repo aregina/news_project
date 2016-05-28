@@ -1,7 +1,7 @@
 
 var isMouseClick = false,
-    startPosition = 0,
-    lastMouseDelta = 0,
+    previosMousePosition = 0,
+    timeLinePosition = 0,
     parseDate = d3.time.format("%Y-%m-%d").parse;
 
 const elementHeight = 25;
@@ -28,12 +28,9 @@ d3.json("/?json2", function (error, jData) {
     svg.on("mousemove", mousemove)
         .on("mousedown", function () {
             isMouseClick = true;
-            startPosition = d3.event.clientY;
+            previosMousePosition = d3.event.clientY;
         })
-        .on("mouseup", function () {
-            isMouseClick = false;
-            lastMouseDelta += (startPosition - d3.event.clientY) * -1;
-        });
+        .on("mouseup", function () {isMouseClick = false;});
 
     jData.forEach(function (d) {
         d.y = parseDate(d.y);
@@ -46,7 +43,7 @@ d3.json("/?json2", function (error, jData) {
 
     jData.reverse();
 
-    rect_width = d3.scale
+    var rect_width = d3.scale
         .linear()
         .range([1, graphWidth])
         .domain(d3.extent(jData, function (d) { return d.cnt; }));
@@ -57,7 +54,7 @@ d3.json("/?json2", function (error, jData) {
         day: 'numeric'
     };
 
-    pubDate = container
+    var pubDate = container
         .append("text")
         .attr("text-anchor","end")
         .attr("class", "date")
@@ -69,7 +66,7 @@ d3.json("/?json2", function (error, jData) {
         .attr("y", function (d, i) { return i * elementHeight + "px" })
         .text(function (d, i) { return i % dateDistanse ? " " : d.y.toLocaleString("ru", options) });
 
-    graphic = container
+    var graphic = container
         .selectAll("rect")
         .data(jData)
         .enter()
@@ -123,19 +120,32 @@ d3.json("/?json2", function (error, jData) {
 
     function mousemove() {
         if (isMouseClick) {
-            mouseDelta = lastMouseDelta + (startPosition - d3.mouse(this)[1]) * -1;
-            container.transition()
-                .duration(1500)
-                .ease("elastic")
-                .attr("transform", "translate(0," + mouseDelta + ")");
-            var n_id = Math.floor(mouseDelta / elementHeight) * -1;
-            text_prev.text(getText(n_id - 1));
-            text.text(getText(n_id));
-            text_post.text(getText(n_id + 1));
-
-            link_to_news.attr("href", getUrl(n_id));
+            var currPos = d3.mouse(this)[1];
+            moveTimeLine((previosMousePosition - currPos))
+            previosMousePosition = currPos;
         }
     }
+    
+    function moveTimeLine(delta) {
+        timeLinePosition += -delta
+        container.transition()
+                .duration(1500)
+                .ease("elastic")
+                .attr("transform", "translate(0," + timeLinePosition + ")");
+        var n_id = Math.floor(timeLinePosition / elementHeight) * -1;
+        text_prev.text(getText(n_id - 1));
+        text.text(getText(n_id));
+        text_post.text(getText(n_id + 1));
+
+        link_to_news.attr("href", getUrl(n_id));
+    }
+    
+    var timer = setInterval(
+        function(){
+            moveTimeLine(elementHeight);
+        },
+        1000
+    )
 })
 
 
