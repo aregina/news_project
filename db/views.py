@@ -62,7 +62,7 @@ def tags(request, daily=False):
     key_query = KeyWord.objects
     if daily:
         key_query = key_query.filter(news__pub_date__day=15, news__pub_date__month=5)
-    key_query = key_query.annotate(cnt=Count('news')).filter(cnt__gt=30)
+    key_query = key_query.annotate(cnt=Count('news')).filter(cnt__gt=1000)[:150]
     key_range = key_query.aggregate(max=Max('cnt'), min=Min('cnt'))
     context = {"key": key_query.annotate(cnt_n=ExpressionWrapper(
         trivial_abs(F('cnt'), key_range['max'], key_range['min']), output_field=DecimalField(decimal_places=1)))}
@@ -94,15 +94,8 @@ def news_detail(request, news_id=0):
 def new_news_detail(request, news_id=0):
     if 'json' in request.GET:
         news = News.objects.get(pk=news_id)
-        # resp_dict = list()
-        # for n in News.related_news.iterator():
-        #     di = dict()
-        #
-        #     first_day_news = News.objects.get(id=n['i'])
-        #     n["n"] = first_day_news.title
-        #     resp_dict.append(n)
-
         return JsonResponse([{"id": n.pk, "date": n.pub_date} for n in news.related_news.iterator()], safe=False)
+
     news = get_object_or_404(News, pk=news_id)
     context = {"news": news}
     return render(request, 'db/news2.html', context)
