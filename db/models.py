@@ -15,7 +15,6 @@ class News(models.Model):
     is_parsed = models.BooleanField('text was parsed?', default=False)
 
 
-
 class RssChannels(models.Model):
     site = models.ForeignKey(Site, on_delete=models.CASCADE)
     url = models.URLField(max_length=300)
@@ -44,12 +43,15 @@ class AllTags(models.Model):
     tag = models.CharField(max_length=20)
 
 
+# TODO переделать связь на News
 class NewsTags(models.Model):
     news = models.ForeignKey(NewsText, on_delete=models.CASCADE)
     tag = models.ForeignKey(AllTags, on_delete=models.CASCADE)
     weight = models.DecimalField(max_digits=6, decimal_places=3)
 
 
+# TODO переделать связь на News
+# TODO переделать отношение на OneToOneField
 class NewsEmotions(models.Model):
     news = models.ForeignKey(NewsText, on_delete=models.CASCADE)
     emo_weight = models.DecimalField(max_digits=5, decimal_places=4)

@@ -5,7 +5,6 @@
     <link rel="stylesheet" href="/static/db/news.css" type="text/css">
     <script src="//d3js.org/d3.v3.min.js"></script>
     <link href='https://fonts.googleapis.com/css?family=Roboto+Slab&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
-
 </head>
 
 <body>
@@ -13,58 +12,25 @@
         <div class="container">
             <div class="news">
                 <div class="tags">
-                    <span class="cu_tag">IT</span>
-                    <span class="cu_tag">Ecomomics</span>
-                    <span class="cu_tag">War</span>
+                    {{ n.newstext.newsemotions_set.first }}
+                    {% if news.newstext.newstags_set.exists %}
+                        {% for tag in news.newstext.newstags_set.all %}
+                            <span class="cu_tag">{{ tag.tag.tag.upper }}</span> 
+                        {% endfor %} 
+                    {% endif %}
                 </div>
                 <div class="news_text">
                     <h2>{{ news.site.name }}</h2>
                     <h1>{{ news.title }}</h1>
                 </div>
                 <div class="keys">
-                    <a href="список">
-                        <span style="font-size:1.2em">список</span>
-                    </a>
-
-                    <a href="спортсмен">
-                        <span style="font-size:1.1em">спортсмен</span>
-                    </a>
-
-                    <a href="видео">
-                        <span style="font-size:1.1em">видео</span>
-                    </a>
-
-                    <a href="убийство">
-                        <span style="font-size:1.2em">убийство</span>
-                    </a>
-
-                    <a href="власть">
-                        <span style="font-size:1.6em">власть</span>
-                    </a>
-
-                    <a href="россиянин">
-                        <span style="font-size:1.3em">россиянин</span>
-                    </a>
-
-                    <a href="организация">
-                        <span style="font-size:1.4em">организация</span>
-                    </a>
-
-                    <a href="суд">
-                        <span style="font-size:2.2em">суд</span>
-                    </a>
-
-                    <a href="гражданин">
-                        <span style="font-size:1.3em">гражданин</span>
-                    </a>
-
-                    <a href="сутки">
-                        <span style="font-size:1.1em">сутки</span>
-                    </a>
-
-                    <a href="конкурс">
-                        <span style="font-size:1.0em">конкурс</span>
-                    </a>
+                    {% if news.keyword_set %}
+                        {% for k in news.keyword_set.all %}
+                            <a href="/tags/{{ k.word }}">
+                                <span style="font-size:{{ k.cnt_n }}em">{{ k.word }}</span>
+                            </a>
+                        {% endfor %}
+                    {% endif %}
                 </div>
             </div>
             <div class="svg"></div>
@@ -72,4 +38,5 @@
     </div>
     <script src="/static/db/news.js"></script>
 </body>
+
 </html>
