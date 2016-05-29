@@ -6,12 +6,23 @@ const lineStop = 80;
 var svg = d3.select(".svg").append("svg")
     .attr("width", "100%")
     .attr("height", "100%")
+    
+var emoLinePos = d3.scale
+        .linear()
+        .range([lineStart, lineStop])
+        .domain([1,0]);
 
-var line_h = svg.append("line")
+var emoLine = svg.append("line")
     .attr("x1", lineStart + "%")
     .attr("y1", emoLineTop + "%")
     .attr("x2", lineStop + "%")
     .attr("y2", emoLineTop + "%");
+    
+var curNewsEmo = svg.append("line")
+    .attr("x1", emoLinePos(emoWeight) + "%")
+    .attr("y1", (emoLineTop-1) + "%")
+    .attr("x2", emoLinePos(emoWeight) + "%")
+    .attr("y2", (emoLineTop+1) + "%");
 
 var line = svg.append("line")
     .attr("x1", linePosition + "%")

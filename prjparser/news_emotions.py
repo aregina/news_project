@@ -1,4 +1,4 @@
-import pandas as pd
+#import pandas as pd
 from sklearn.linear_model import LogisticRegression
 from sklearn.feature_extraction.text import TfidfVectorizer
 import pickle
@@ -55,17 +55,9 @@ def get_emotions(news):
     #     lr = pickle.loads(lr_pickled)
 
     res_proba_of_emo = lr.predict_proba(news_vectorized)
-    probability_of_good = res_proba_of_emo[0][1]*100
+    probability_of_good = res_proba_of_emo[0][1]
 
     return probability_of_good
 
 if __name__ == "__main__":
     pass
-else:
-    with open('prjparser/tf.txt', 'br') as tf_file:
-        tf_pickled = tf_file.read()
-        tf = pickle.loads(tf_pickled)
-
-    with open('prjparser/lr.txt', 'br') as lr_file:
-        lr_pickled = lr_file.read()
-        lr = pickle.loads(lr_pickled)

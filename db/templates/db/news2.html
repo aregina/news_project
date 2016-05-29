@@ -5,6 +5,7 @@
     <link rel="stylesheet" href="/static/db/news.css" type="text/css">
     <script src="//d3js.org/d3.v3.min.js"></script>
     <link href='https://fonts.googleapis.com/css?family=Roboto+Slab&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
+    <script>var emoWeight = {{ news.newstext.newsemotions.emo_weight }}</script>
 </head>
 
 <body>
@@ -12,7 +13,6 @@
         <div class="container">
             <div class="news">
                 <div class="tags">
-                    {{ n.newstext.newsemotions_set.first }}
                     {% if news.newstext.newstags_set.exists %}
                         {% for tag in news.newstext.newstags_set.all %}
                             <span class="cu_tag">{{ tag.tag.tag.upper }}</span> 

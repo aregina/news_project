@@ -51,9 +51,12 @@ class NewsTags(models.Model):
 
 
 # TODO переделать связь на News
-# TODO переделать отношение на OneToOneField
 class NewsEmotions(models.Model):
-    news = models.ForeignKey(NewsText, on_delete=models.CASCADE)
+    news = models.OneToOneField(
+        NewsText,
+        on_delete=models.CASCADE,
+        primary_key=True,
+    )
     emo_weight = models.DecimalField(max_digits=5, decimal_places=4)
 
 
