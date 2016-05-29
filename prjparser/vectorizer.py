@@ -100,6 +100,7 @@ def open_tf_idf_file():
 
 if __name__ == "__main__":
     # main()
-    news_comparer(5)
+    for i in range(20,60):
+        news_comparer(i)
 else:
     tf_idf_var = open_tf_idf_file()

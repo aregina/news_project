@@ -77,10 +77,38 @@ class AsyncTextPreparer(multiproc.MultiProc):
             print(news_text)
 
 
+class AsyncHtmlParser(multiproc.MultiProc):
+    task_manager = News.objects.filter(is_parsed=False).iterator
+
+    @staticmethod
+    def worker(news):
+        html = urlOpen.get_html(news.url)
+        print(str(news.pk) + "     ", end='\n')
+        if html:
+            text = textParser.get_text_from_html(html)
+            url_list = [url for url in aParser.get_a_from_news_text(news_url=news.url, text=text)]
+            text = aParser.remove_all_tags(text)
+            text = text_prerparer.text_preparer(text)
+            return NewsText(news=news, text=text), url_list
+
+    @staticmethod
+    def writer(container):
+        news_text, url_list = container
+        news_text.save()
+
+        for url in url_list:
+            url_in_text, created = UrlInText.objects.get_or_create(url=url)
+            url_in_text.news.add(news_text.news)
+
+        news_text.news.is_parsed = True
+        news_text.news.save()
+
+
 def main():
-    HtmlParser().run()
-    NewsTextParser().run()
-    AsyncTextPreparer().run()
+    # HtmlParser().run()
+    # NewsTextParser().run()
+    # AsyncTextPreparer().run()
+    AsyncHtmlParser().run()
 
 
 if __name__ == "__main__":

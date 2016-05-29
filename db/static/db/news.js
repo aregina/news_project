@@ -6,7 +6,7 @@ const lineStop = 80;
 var svg = d3.select(".svg").append("svg")
     .attr("width", "100%")
     .attr("height", "100%")
-    
+
 var emoLinePos = d3.scale
         .linear()
         .range([lineStart, lineStop])
@@ -17,7 +17,9 @@ var emoLine = svg.append("line")
     .attr("y1", emoLineTop + "%")
     .attr("x2", lineStop + "%")
     .attr("y2", emoLineTop + "%");
-    
+///   emoWeight приходит из шаблона
+var emoWeight = (typeof emoWeight!='undefined')?emoWeight:0.5;
+
 var curNewsEmo = svg.append("line")
     .attr("x1", emoLinePos(emoWeight) + "%")
     .attr("y1", (emoLineTop-1) + "%")

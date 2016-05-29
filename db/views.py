@@ -41,7 +41,7 @@ def index(request):
     if 'json2' in request.GET:
         from django.db.models import Count
         news = News.objects \
-            .extra({'y': 'strftime("%Y-%m-%d",pub_date)'}) \
+            .extra({'y': 'date(pub_date)'}) \
             .values('y') \
             .annotate(cnt=Count('pub_date')) \
             .annotate(i=Min('id'))
