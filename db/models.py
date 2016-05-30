@@ -9,10 +9,10 @@ class News(models.Model):
     related_news = models.ManyToManyField("self")
     site = models.ForeignKey(Site, on_delete=models.CASCADE)
     title = models.CharField(max_length=300)
-    url = models.URLField(max_length=300, db_index=True)
+    url = models.URLField(max_length=255, unique=True)
     pub_date = models.DateTimeField('date published', db_index=True)
     summary = models.TextField(blank=True, null=True)
-    is_parsed = models.BooleanField('text was parsed?', default=False)
+    is_parsed = models.BooleanField('text was parsed?', default=False, db_index=True)
 
 
 class RssChannels(models.Model):
@@ -27,20 +27,20 @@ class NewsText(models.Model):
         primary_key=True,
     )
     text = models.TextField()
-    is_keywords_extracted = models.BooleanField(default=False)
+    is_keywords_extracted = models.BooleanField(default=False, db_index=True)
     is_parsed = models.BooleanField(default=False)
-    check_tag = models.BooleanField(default=False)
-    is_emo_defined = models.BooleanField(default=False)
-    is_vectorized = models.BooleanField(default=False)
+    check_tag = models.BooleanField(default=False, db_index=True)
+    is_emo_defined = models.BooleanField(default=False, db_index=True)
+    is_vectorized = models.BooleanField(default=False, db_index=True)
 
 
 class KeyWord(models.Model):
     news = models.ManyToManyField(News)
-    word = models.CharField(max_length=300)
+    word = models.CharField(max_length=100, unique=True)
 
 
 class AllTags(models.Model):
-    tag = models.CharField(max_length=20)
+    tag = models.CharField(max_length=20, unique=True)
 
 
 # TODO переделать связь на News

@@ -71,6 +71,7 @@ def news_comparer(news_id):
         vector = pickle.loads(news_vector.vector)
         if not vector.getnnz():
             continue
+        print(news_vector.news.pk, end="\n")
         text_similarity = compare_news_vector(pivot_news_vector, vector)
         if text_similarity < 0.71:
             count += 1
@@ -100,7 +101,6 @@ def open_tf_idf_file():
 
 if __name__ == "__main__":
     # main()
-    for i in range(20,60):
-        news_comparer(i)
+    news_comparer(3)
 else:
     tf_idf_var = open_tf_idf_file()
