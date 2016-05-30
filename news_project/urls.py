@@ -20,7 +20,6 @@ import db.views
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^$', db.views.index, name='index'),
-    url(r'^test$', db.views.test_index, name='test_index'),
     url(r'^tags/$', db.views.tags, name='tags'),
     url(r'^tags/daily$', db.views.tags, {'daily': True}, name='tags'),
     url(r'^tags/(?P<key_list>(\w|\+)+)/$', db.views.tag_detail, name='tag_detail'),
