@@ -13,7 +13,9 @@ def get_plain_text(text, interesting_speach_parts):
     interesting_words_from_news = []
     for word in separated_words:
         parsed_word = MORPH.parse(word)[0]
-        if parsed_word.tag.POS is None or parsed_word.tag.POS in interesting_speach_parts:
+        if word.isupper():
+            interesting_words_from_news.append(parsed_word.word)
+        elif parsed_word.tag.POS is None or parsed_word.tag.POS in interesting_speach_parts:
             interesting_words_from_news.append(parsed_word.normal_form)
 
     plain_text = ' '.join(interesting_words_from_news)
@@ -27,7 +29,9 @@ def get_plain_words_list(text, interesting_speach_parts):
     plain_words_list = []
     for word in separated_words:
         parsed_word = MORPH.parse(word)[0]
-        if parsed_word != '-' and parsed_word.tag.POS in interesting_speach_parts:
+        if word.isupper():
+            plain_words_list.append(parsed_word.word)
+        elif parsed_word != '-' and parsed_word.tag.POS in interesting_speach_parts:
             plain_words_list.append(parsed_word.normal_form)
 
     return plain_words_list
