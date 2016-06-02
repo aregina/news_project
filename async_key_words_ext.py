@@ -45,7 +45,7 @@ class KeyWordsExtractorMySql(multiproc.MultiProc):
 
     @staticmethod
     def task_manager():
-        for news_text in NewsText.objects.filter(is_keywords_extracted=False)[:10000].iterator():
+        for news_text in NewsText.objects.filter(is_keywords_extracted=False).iterator():
             yield news_text
 
     @staticmethod

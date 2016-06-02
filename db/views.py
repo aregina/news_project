@@ -75,3 +75,15 @@ def new_news_detail(request, news_id=0):
     news = get_object_or_404(News, pk=news_id)
     context = {"news": news}
     return render(request, 'db/news2.html', context)
+
+
+def news_per_day(request):
+    news = News.objects
+    if "related_news" in request.GET:
+        news = news.get(pk=request.GET["related_news"]).related_news
+    if "day" in request.GET:
+        news = news.filter(pub_date__day=request.GET["day"])
+    if "month" in request.GET:
+        news = news.filter(pub_date__month=request.GET["month"])
+    context = {"news_list": news, "key_list": [1,2]}
+    return render(request, 'db/key_list.html', context)

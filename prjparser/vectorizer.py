@@ -3,29 +3,24 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from db.models import NewsText, News, NewsVector
 from scipy.spatial.distance import cosine
 import pickle
+import numpy
+from scipy.sparse import csr_matrix
 
 
-def get_text(news_text_id):
-    try:
-        text = NewsText.objects.get(pk=news_text_id).text
-    except:
-        text = None
-    return text
+def get_time(func):
+    import time
 
+    def warp(*args):
+        start = time.time()
+        res = func(*args)
+        print(time.time() - start)
+        return res
 
-def print_news_title(news_text_id):
-    title = NewsText.objects.get(pk=news_text_id).news.title
-    print("\t{}\t{}".format(title, news_text_id))
-
-
-def compare_news(id1, id2, vectorizer):
-    n1 = vectorizer.transform([get_text(id1)])
-    n2 = vectorizer.transform([get_text(id2)])
-    return cosine(n1.toarray(), n2.toarray())
+    return warp
 
 
 def compare_news_vector(first_news_vector, second_news_vector):
-    return cosine(first_news_vector.toarray(), second_news_vector.toarray())
+    return cosine(first_news_vector, second_news_vector)
 
 
 def get_tf_idf(big_text):
@@ -40,46 +35,28 @@ def get_big_text():
     return big_text
 
 
-def main():
-    big_text = get_big_text()
-    tf_idf = get_tf_idf(big_text)
-
-    for news_text in NewsText.objects.iterator():
-        if hasattr(news_text.news, "newsvector"):
-            continue
-        print(news_text.pk)
-        vector = tf_idf.transform([news_text.text])
-        pickled_vector = pickle.dumps(vector)
-        NewsVector.objects.create(news=news_text.news, vector=pickled_vector)
-
-
-def write_vector():
-    big_text = get_big_text()
-    tf_idf = get_tf_idf(big_text)
-
-    news_text = get_text(51465)
-    news_vector = tf_idf.transform([news_text])
-    return news_vector
-
-
 def news_comparer(news_id):
     pivot_news = News.objects.get(pk=news_id)
     pivot_news_vector = pickle.loads(pivot_news.newsvector.vector)
-    print(pivot_news.title)
-    count = 0
-    for news_vector in NewsVector.objects.filter().iterator():
+    pivot_news_arr = pivot_news_vector.toarray()[0]
+    # print(pivot_news.title)
+    # count = 0
+    for news_vector in NewsVector.objects.all():
         vector = pickle.loads(news_vector.vector)
-        if not vector.getnnz():
-            continue
-        print(news_vector.news.pk, end="\n")
-        text_similarity = compare_news_vector(pivot_news_vector, vector)
+        # if not vector.getnnz():
+        #     continue
+        # print(news_vector.news.pk, end="\n")
+        text_similarity = compare_news_vector_with_(pivot_news_arr, vector)[0]
+        # text_similarity2 = compare_news_vector(pivot_news_arr, vector.toarray()[0])
+        # if text_similarity2 != text_similarity and (text_similarity - text_similarity2) > 0.000001:
+        #     print(news_vector.pk)
         if text_similarity < 0.71:
-            count += 1
+            # count += 1
             news_vector.news.related_news.add(pivot_news)
-            print(text_similarity, end="\t")
-            print(news_vector.news.pk, end="\t")
-            print(news_vector.news.title)
-    print(count)
+            # print(text_similarity, end="\t")
+            # print(news_vector.news.pk, end="\t")
+            # print(news_vector.news.title)
+            # print(count)
 
 
 def get_pickled_vector(text):
@@ -99,8 +76,54 @@ def open_tf_idf_file():
     return pickle.loads(f)
 
 
+@get_time
+def compare_news_vector_with_to_array(first_news_vector, second_news_vector):
+    return cosine(first_news_vector.toarray(), second_news_vector.toarray())
+
+
+# @get_time
+def compare_news_vector_with_(arr, vec: csr_matrix):
+    return 1 - vec.dot(arr)
+
+
+# @get_time
+def compare_news_vector_with_1(arr, vec: csr_matrix):
+    return 1 - vec._mul_vector(arr)
+
+
+def comp_all_news(start=0):
+    a = NewsVector.objects.all()
+    for i in range(start, len(a) - 1):
+        print(i)
+        pivot_news_vector = pickle.loads(a[i].vector)
+        if pivot_news_vector.getnnz() == 0:
+            continue
+        pivot_news_arr = pivot_news_vector.toarray()[0]
+        for j in range(i, len(a)):
+            vector = pickle.loads(a[j].vector)
+            text_similarity = compare_news_vector_with_(pivot_news_arr, vector)[0]
+            if text_similarity < 0.71:
+                a[j].news.related_news.add(a[i].news)
+
+
+@get_time
+def main():
+    # news_comparer(29)
+    comp_all_news(29)
+    # v = NewsVector.objects.get(pk=1605)
+    # v1 = NewsVector.objects.get(pk=1600)
+    #
+    # pic_v = pickle.loads(v.vector)
+    # arr_pic_v = pic_v.toarray()[0]
+    # piv_v1 = pickle.loads(v1.vector)
+    # print(compare_news_vector(pic_v.toarray(), piv_v1.toarray()))
+    # print(compare_news_vector_with_to_array(pic_v, piv_v1))
+    # print(compare_news_vector_with_(arr_pic_v,piv_v1)[0])
+    # print(compare_news_vector_with_1(arr_pic_v,piv_v1)[0])
+    # print(arr_pic_v.__class__)
+
+
 if __name__ == "__main__":
-    # main()
-    news_comparer(3)
+    main()
 else:
     tf_idf_var = open_tf_idf_file()

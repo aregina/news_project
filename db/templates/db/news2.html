@@ -5,7 +5,7 @@
     <link rel="stylesheet" href="/static/db/news.css" type="text/css">
     <script src="//d3js.org/d3.v3.min.js"></script>
     <link href='https://fonts.googleapis.com/css?family=Roboto+Slab&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
-    <script>var emoWeight = {{ news.newstext.newsemotions.emo_weight }}</script>
+    <script>var emoWeight = {{ news.newstext.newsemotions.emo_weight }}, newsId = {{ news.pk }};</script>
 </head>
 
 <body>

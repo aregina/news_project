@@ -68,7 +68,6 @@
 .news_line{
     stroke:  black;
     stroke-width: 1;
-    fill:white;  
 }
 
 .news_line:hover {
