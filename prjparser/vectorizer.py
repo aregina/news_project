@@ -6,6 +6,8 @@ import pickle
 import numpy
 from scipy.sparse import csr_matrix
 
+FILE_PATH = "prjparser/tf_idf_vectorizer.bin"
+
 
 def get_time(func):
     import time
@@ -67,12 +69,12 @@ def get_pickled_vector(text):
 def make_tf_idf_file():
     big_text = get_big_text()
     tf_idf = get_tf_idf(big_text)
-    with open("tf_idf_vectorizer.bin", "wb") as file:
+    with open(FILE_PATH, "wb") as file:
         file.write(pickle.dumps(tf_idf))
 
 
 def open_tf_idf_file():
-    f = open("prjparser/tf_idf_vectorizer.bin", "rb").read()
+    f = open(FILE_PATH, "rb").read()
     return pickle.loads(f)
 
 
@@ -126,4 +128,8 @@ def main():
 if __name__ == "__main__":
     main()
 else:
+    import os.path
+
+    if not os.path.isfile(FILE_PATH):
+        make_tf_idf_file()
     tf_idf_var = open_tf_idf_file()
