@@ -20,6 +20,10 @@ class RssChannels(models.Model):
     url = models.URLField(max_length=300)
 
 
+class AllTags(models.Model):
+    tag = models.CharField(max_length=20, unique=True)
+
+
 class NewsText(models.Model):
     news = models.OneToOneField(
         News,
@@ -32,15 +36,12 @@ class NewsText(models.Model):
     check_tag = models.BooleanField(default=False, db_index=True)
     is_emo_defined = models.BooleanField(default=False, db_index=True)
     is_vectorized = models.BooleanField(default=False, db_index=True)
+    tags = models.ManyToManyField(AllTags, through='NewsTags')
 
 
 class KeyWord(models.Model):
     news = models.ManyToManyField(News)
     word = models.CharField(max_length=100, unique=True)
-
-
-class AllTags(models.Model):
-    tag = models.CharField(max_length=20, unique=True)
 
 
 # TODO переделать связь на News

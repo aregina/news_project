@@ -26,5 +26,6 @@ urlpatterns = [
     url(r'^news/id(?P<news_id>[0-9]+)/$', db.views.news_detail, name='tag_detail'),
     url(r'^news2/id(?P<news_id>[0-9]+)/$', db.views.new_news_detail, name='new_news_detail'),
     url(r'^news/day/$', db.views.news_per_day, name='tag_detail'),
-
+    url(r'^main/$', db.views.main_page, name='main_page'),
+    url(r'^news3/id(?P<news_id>[0-9]+)/$', db.views.news3_detail, name='news3_detail'),
 ]
