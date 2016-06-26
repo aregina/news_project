@@ -9,7 +9,7 @@ import pickle
 import sklearn.cluster as s
 from db.models import *
 import numpy as np
-base  = NewsVector.objects.all()[:20000]
+base  = NewsVector.objects.all()[:200]
 vec_base = np.array([pickle.loads(v.vector).toarray()[0] for v in base])
 
 
