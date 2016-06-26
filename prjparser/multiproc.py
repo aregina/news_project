@@ -78,7 +78,11 @@ class MultiProc(object):
                         result = self.result_queue.get(timeout=0.1)
                     except Empty:
                         continue
-                    write_function(result)
+                    # TODO этот процесс должен всегда работать.
+                    try:
+                        write_function(result)
+                    except:
+                        continue
 
     def run(self):
         self.__invoke_worker_process(self.worker)
