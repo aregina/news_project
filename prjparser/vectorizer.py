@@ -111,7 +111,7 @@ def comp_all_news(start=0):
 @get_time
 def main():
     # news_comparer(29)
-    comp_all_news(29)
+    comp_all_news()
     # v = NewsVector.objects.get(pk=1605)
     # v1 = NewsVector.objects.get(pk=1600)
     #

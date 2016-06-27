@@ -13,7 +13,7 @@ class MultiProc(object):
         self.result_queue = Queue()
         self.process_number = process_number
 # TODO использовать cpu_count
-    
+
     def __call__(self):
         self.run()
 
@@ -82,8 +82,8 @@ class MultiProc(object):
                     # TODO этот процесс должен всегда работать.
                     try:
                         write_function(result)
-                    except:
-                        continue
+                    except Exception as e:
+                        print(e)
 
     def run(self):
         self.__invoke_worker_process(self.worker)
