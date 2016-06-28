@@ -37,7 +37,7 @@
         </div>
         <div id="navbar" class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
-            <li class="active"><a href="#">Home</a></li>
+            <li class="active"><a href="#main_page">Home</a></li>
             <li><a href="#about">About</a></li>
             <li><a href="#contact">Contact</a></li>
           </ul>
@@ -55,13 +55,12 @@
           </p>
           <div class="jumbotron">
             <h1>NewsGear</h1>
-            <p>This is an example to show the potential of an offcanvas layout pattern in Bootstrap. Try some responsive-range viewport sizes to see it in action.</p>
+            <p>Аналитический новостной портал</p>
           </div>
           <div class="row">
               {% for current_news in news %}
                   <div class="col-xs-6 col-lg-4">
                     <h2>{{current_news.title}}</h2>
-                    <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
                     <p><a class="btn btn-default" href="/news3/id{{ current_news.id }}" role="button">View details &raquo;</a></p>
                   </div><!--/.col-xs-6.col-lg-4-->
               {% endfor %}
@@ -71,8 +70,21 @@
 
       <hr>
 
+      <nav>
+          <ul class="pager">
+              {% if contacts.has_previous %}
+                  <li class="pager-prev"><a href="?page={{ contacts.previous_page_number }}">Previous</a></li>
+              {% endif %}
+
+              {% if contacts.has_next %}
+                  <li class="pager-next"><a href="#">Next</a></li>
+              {% endif %}
+              <li class="pager-next"><a href="?page={{ contacts.next_page_number }}">Newer</a></li>
+          </ul>
+      </nav>
+
       <footer>
-        <p>&copy; 2015 Company, Inc.</p>
+        <p>&copy; 2016 NewsGear</p>
       </footer>
 
     </div><!--/.container-->

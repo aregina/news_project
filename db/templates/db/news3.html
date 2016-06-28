@@ -70,7 +70,11 @@
           <div class="jumbotron">
             <div class="row">
                 <div class="col-md-11"><h1>{{ news.title }}</h1></div>
-                <div class="col-md-1 "><h3><span class="label label-success">Good</span></h3></div>
+                {% if emo > 0.5 %}
+                    <div class="col-md-1 "><h3><span class="label label-success">Good</span></h3></div>
+                {% else %}
+                    <div class="col-md-1 "><h3><span class="label label-danger">Bad</span></h3></div>
+                {% endif %}
             </div>
               <div class="row">
                 <div class="col-md-4"><p class="text-left"><a href={{ news.url }}>{{ news.site.name }}</a></p></div>
@@ -92,9 +96,10 @@
 {#    </div><!--/row-->#}
 
     <xz></xz>
+    <hr>
 
       <footer>
-        <p>&copy; 2016 Company, Inc.</p>
+        <p>&copy; 2016 NewsGear</p>
       </footer>
 
     </div><!--/.container-->

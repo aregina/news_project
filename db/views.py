@@ -1,9 +1,11 @@
-from django.shortcuts import render, get_object_or_404
-from db.models import *
-from django.db import connection
+import itertools
+
+from django.core.paginator import Paginator
 from django.db.models import Count, Max, Min, F, DecimalField, ExpressionWrapper
 from django.http import JsonResponse
+from django.shortcuts import render, get_object_or_404
 
+from db.models import *
 
 MAX_RETURN = 5
 MIN_RETURN = 1
@@ -92,16 +94,21 @@ def news_per_day(request):
 
 
 def main_page(request):
-    news = []
-    for i in range(7,13):
-        news.append(News.objects.get(pk=i))
-    context = {"news": news}
+    all_news = News.objects.all()
+    paginator = Paginator(all_news, 6)
+    page = request.GET.get('page', 1)
+    news_list = paginator.page(page)
+    # news = []
+    # for i in range(7,13):
+    #     news.append(News.objects.get(pk=i))
+    context = {"news": news_list}
     return render(request, 'db/main_page.html', context)
 
 
 def news3_detail(request, news_id=0):
     news = get_object_or_404(News, pk=news_id)
-    context = {"news": news}
+    emo = news.newstext.newsemotions.emo_weight
+    context = {"news": news, "emo": emo}
     return render(request, 'db/news3.html', context)
 
 
@@ -125,9 +132,11 @@ def related_news_json(request, news_id=0):
 
 
 def news_theme(request):
-    news = []
-    for i in range(7,13):
-        news.append(News.objects.get(pk=i))
+    all_news = News.objects.all()
+    paginator = Paginator(all_news, 6)
+    page = request.GET.get('page', 1)
+    news_list = paginator.page(page)
+
     news_count = News.objects.count()
     all_news = News.objects.order_by('pub_date').all()
     sites_info = []
@@ -139,22 +148,23 @@ def news_theme(request):
         current_site_info.append(news_per_site*100//news_count)
         sites_info.append(current_site_info)
 
-    print(sites_info)
-    emotions = [['Положительные новости'], ['Отрицательные новости']]
-    good_news_pers = (all_news.filter(newstext__newsemotions__emo_weight__gte=2.5).count()/news_count)*100
-    # emotions[0].append(good_news_pers)
-    # emotions[1].append(100 - good_news_pers)
-    import itertools
+    emotions = [['Позитивные'], ['Негативные']]
+    good_news_pers = (all_news.filter(newstext__newsemotions__emo_weight__gte=0.5).count()/news_count)*100
+    emotions[0].append(good_news_pers)
+    emotions[1].append(100 - good_news_pers)
+
     dates = ['x']
     news_count_per_day = ['Количество новостей за последние дни']
     for key, group in itertools.groupby(all_news, key=lambda x: str(x.pub_date.date())):
         dates.append(str(key))
         news_count_per_day.append(len(list(group)))
-    context = { 'news': news,
+        
+    context = { 'news': news_list,
                 'news_count': news_count,
                 'news_dates': dates[:6],
                 'news_count_per_day': news_count_per_day[:6],
                 'sites_info': sites_info,
+                'emotions': emotions,
                 }
     # print(report)
     return render(request, 'db/news_theme.html', context)

@@ -84,7 +84,7 @@
                   <div class="col-xs-6 col-lg-4">
                     <h2>{{current_news.title}}</h2>
                     <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
-                    <p><a class="btn btn-default" href="/news2/id{{ current_news.id }}" role="button">View details &raquo;</a></p>
+                    <p><a class="btn btn-default" href="/news3/id{{ current_news.id }}" role="button">View details &raquo;</a></p>
                   </div><!--/.col-xs-6.col-lg-4-->
               {% endfor %}
           </div>
@@ -93,8 +93,21 @@
 
       <hr>
 
+      <nav>
+          <ul class="pager">
+              {% if contacts.has_previous %}
+                  <li class="pager-prev"><a href="?page={{ contacts.previous_page_number }}">Previous</a></li>
+              {% endif %}
+
+              {% if contacts.has_next %}
+                  <li class="pager-next"><a href="#">Next</a></li>
+              {% endif %}
+              <li class="pager-next"><a href="?page={{ contacts.next_page_number }}">Newer</a></li>
+          </ul>
+      </nav>
+
       <footer>
-        <p>&copy; 2015 Company, Inc.</p>
+        <p>&copy; 2016 NewsGear</p>
       </footer>
 
     </div><!--/.container-->
@@ -112,16 +125,17 @@
         var chart = c3.generate({
             bindto: '#total_news_count',
             data: {
-            columns: [
-                ['Позитивные', 30],
-                ['Негативные', 120],
-                ],
-            type : 'donut',
-            colors: {
-                Позитивные: 'green',
-                Негативные: 'red'
+                columns: {% autoescape off %}{{ emotions }}{% endautoescape %},
+{#            columns: [#}
+{#                ['Позитивные', 30],#}
+{#                ['Негативные', 120],#}
+{#                ],#}
+                type : 'donut',
+                colors: {
+                    Позитивные: 'green',
+                    Негативные: 'red'
+                },
             },
-        },
         donut: {
             title: "Эмоциональная окраска"
             }
