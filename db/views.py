@@ -1,7 +1,9 @@
 from django.shortcuts import render, get_object_or_404
 from db.models import *
+from django.db import connection
 from django.db.models import Count, Max, Min, F, DecimalField, ExpressionWrapper
 from django.http import JsonResponse
+
 
 MAX_RETURN = 5
 MIN_RETURN = 1
@@ -101,3 +103,58 @@ def news3_detail(request, news_id=0):
     news = get_object_or_404(News, pk=news_id)
     context = {"news": news}
     return render(request, 'db/news3.html', context)
+
+
+def related_news_json(request, news_id=0):
+    # main_news = get_object_or_404(News, pk=news_id)
+    # related_news = {"name": main_news.title, "children": []}
+    # for news in main_news.related_news:
+    #     related_news_info = {"name": news.title, "size": 6714}
+    #     related_news["children"].append(related_news_info)
+    main_news = get_object_or_404(News, pk=news_id)
+    related_news = {
+         "name": main_news.title,
+          "children": [
+               {"name": "AgglomerativeCluster", "size": 100000},
+               {"name": "CommunityStructure", "size": 100000},
+               {"name": "HierarchicalCluster", "size": 100000},
+               {"name": "MergeEdge", "size": 100000}
+                ]
+            }
+    return JsonResponse(related_news)
+
+
+def news_theme(request):
+    news = []
+    for i in range(7,13):
+        news.append(News.objects.get(pk=i))
+    news_count = News.objects.count()
+    all_news = News.objects.order_by('pub_date').all()
+    sites_info = []
+    all_sites = Site.objects.all()
+    for current_site in all_sites:
+        current_site_info = []
+        current_site_info.append(current_site.name)
+        news_per_site = all_news.filter(site__name=current_site.name).count()
+        current_site_info.append(news_per_site*100//news_count)
+        sites_info.append(current_site_info)
+
+    print(sites_info)
+    emotions = [['Положительные новости'], ['Отрицательные новости']]
+    good_news_pers = (all_news.filter(newstext__newsemotions__emo_weight__gte=2.5).count()/news_count)*100
+    # emotions[0].append(good_news_pers)
+    # emotions[1].append(100 - good_news_pers)
+    import itertools
+    dates = ['x']
+    news_count_per_day = ['Количество новостей за последние дни']
+    for key, group in itertools.groupby(all_news, key=lambda x: str(x.pub_date.date())):
+        dates.append(str(key))
+        news_count_per_day.append(len(list(group)))
+    context = { 'news': news,
+                'news_count': news_count,
+                'news_dates': dates[:6],
+                'news_count_per_day': news_count_per_day[:6],
+                'sites_info': sites_info,
+                }
+    # print(report)
+    return render(request, 'db/news_theme.html', context)

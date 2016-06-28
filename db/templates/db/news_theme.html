@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>NewsGear</title>
+
+    <!-- Custom styles for this template -->
+{#    <link href="offcanvas.css" rel="stylesheet">#}
+
+      <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/c3/0.4.11/c3.min.css">
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+
+  <body>
+    <nav class="navbar navbar-fixed-top navbar-inverse">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">NewsGear</a>
+        </div>
+        <div id="navbar" class="collapse navbar-collapse">
+          <ul class="nav navbar-nav">
+            <li class="active"><a href="#">Home</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#contact">Contact</a></li>
+          </ul>
+        </div><!-- /.nav-collapse -->
+      </div><!-- /.container -->
+    </nav><!-- /.navbar -->
+
+    <div class="container">
+
+      <div class="row row-offcanvas row-offcanvas-right">
+
+        <div class="col-xs-12 col-sm-9">
+          <p class="pull-right visible-xs">
+            <button type="button" class="btn btn-primary btn-xs" data-toggle="offcanvas">Toggle nav</button>
+          </p>
+          <div class="jumbotron">
+            <h1>Заголовок новостной темы</h1>
+          </div>
+          <div class="row">
+                  <div class="col-xs-8 col-lg-6">
+                      <div class="chart">
+                          <div id="total_news_count" class="c3"></div>
+                      </div>
+                  </div><!--/.col-xs-6.col-lg-4-->
+                  <div class="col-xs-8 col-lg-6">
+                      <div class="chart">
+                          <div id="agencies_info" class="c3"></div>
+                      </div>
+                  </div><!--/.col-xs-6.col-lg-4-->
+                  <div class="col-xs-8 col-lg-6">
+                    <div class="chart">
+                          <div id="news_count_per_date_info" class="c3"></div>
+                      </div>
+                  </div><!--/.col-xs-6.col-lg-4-->
+                  <div class="col-xs-8 col-lg-6">
+                      <div class="text-center">
+                        <h1>Всего:</h1>
+                        <h1>{{ news_count }} новостей</h1>
+                      </div>
+                  </div><!--/.col-xs-6.col-lg-4-->
+          </div><!--/row-->
+          <div class="row">
+              {% for current_news in news %}
+                  <div class="col-xs-6 col-lg-4">
+                    <h2>{{current_news.title}}</h2>
+                    <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
+                    <p><a class="btn btn-default" href="/news2/id{{ current_news.id }}" role="button">View details &raquo;</a></p>
+                  </div><!--/.col-xs-6.col-lg-4-->
+              {% endfor %}
+          </div>
+        </div><!--/.col-xs-12.col-sm-9-->
+      </div><!--/row-->
+
+      <hr>
+
+      <footer>
+        <p>&copy; 2015 Company, Inc.</p>
+      </footer>
+
+    </div><!--/.container-->
+
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+    <script src="/static/db/offcanvas.js"></script>
+        <script type="text/javascript" src="https://d3js.org/d3.v3.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/c3/0.4.11/c3.min.js"></script>
+    <script>
+        var chart = c3.generate({
+            bindto: '#total_news_count',
+            data: {
+            columns: [
+                ['Позитивные', 30],
+                ['Негативные', 120],
+                ],
+            type : 'donut',
+            colors: {
+                Позитивные: 'green',
+                Негативные: 'red'
+            },
+        },
+        donut: {
+            title: "Эмоциональная окраска"
+            }
+        });
+    </script>
+    <script>
+        var chart = c3.generate({
+            bindto: '#agencies_info',
+            data: {
+                columns: {% autoescape off %}{{ sites_info }}{% endautoescape %},
+                {#            columns: [#}
+                {#                ['data1', 30],#}
+                {#                ['data2', 120]#}
+                {#                ],#}
+                type : 'donut',
+        },
+        donut: {
+            title: "ИСТОЧНИКИ"
+        }});
+    </script>
+    <script>
+        var chart = c3.generate({
+        bindto: '#news_count_per_date_info',
+        data: {
+            x: 'x',
+
+            columns: [
+                  {% autoescape off %}{{ news_dates }}{% endautoescape %},
+                  {% autoescape off %}{{ news_count_per_day }}{% endautoescape %}
+{#                ['x', '2014-07-24', '2014-07-25', '2014-07-26', '2014-07-27', '2014-07-28', '2014-07-29', '2014-07-27', '2014-07-28', '2014-07-29'],#}
+{#                ['Распределение количества новостей по дням', 30, 200, 100, 400, 150, 250, 400, 150, 250]#}
+            ],
+            type: 'bar'
+        },
+
+        axis:{
+            x: {
+                type: 'category',
+                tick: {
+                    rotate: 0,
+                    multiline: false,
+                }
+            }
+        }, bar: {
+                width: {
+                    ratio: 0.2 // this makes bar width 50% of length between ticks
+                }
+                // or
+                //width: 100 // this makes bar width 100px
+            }
+
+        });
+    </script>
+  </body>
+</html>
+
