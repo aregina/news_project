@@ -9,6 +9,11 @@
     <meta name="author" content="">
 
     <title>NewsGear</title>
+      <style>
+        .vcenter {
+            margin-top: 80px;;
+        }
+      </style>
 
     <!-- Custom styles for this template -->
 {#    <link href="offcanvas.css" rel="stylesheet">#}
@@ -33,15 +38,8 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="#">NewsGear</a>
-        </div>
-        <div id="navbar" class="collapse navbar-collapse">
-          <ul class="nav navbar-nav">
-            <li class="active"><a href="#">Home</a></li>
-            <li><a href="#about">About</a></li>
-            <li><a href="#contact">Contact</a></li>
-          </ul>
-        </div><!-- /.nav-collapse -->
+          <a class="navbar-brand" href="/main">NewsGear</a>
+<!-- /.nav-collapse -->
       </div><!-- /.container -->
     </nav><!-- /.navbar -->
 
@@ -72,7 +70,7 @@
                           <div id="news_count_per_date_info" class="c3"></div>
                       </div>
                   </div><!--/.col-xs-6.col-lg-4-->
-                  <div class="col-xs-8 col-lg-6">
+                  <div class="col-xs-8 col-lg-6 vcenter" style="height: 320px">
                       <div class="text-center">
                         <h1>Всего:</h1>
                         <h1>{{ news_count }} новостей</h1>
@@ -83,7 +81,6 @@
               {% for current_news in news %}
                   <div class="col-xs-6 col-lg-4">
                     <h2>{{current_news.title}}</h2>
-                    <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
                     <p><a class="btn btn-default" href="/news3/id{{ current_news.id }}" role="button">View details &raquo;</a></p>
                   </div><!--/.col-xs-6.col-lg-4-->
               {% endfor %}
@@ -95,14 +92,13 @@
 
       <nav>
           <ul class="pager">
-              {% if contacts.has_previous %}
-                  <li class="pager-prev"><a href="?page={{ contacts.previous_page_number }}">Previous</a></li>
+              {% if news.has_previous %}
+                  <li class="pager-prev"><a href="?page={{ news.previous_page_number }}">Previous</a></li>
               {% endif %}
 
-              {% if contacts.has_next %}
-                  <li class="pager-next"><a href="#">Next</a></li>
+              {% if news.has_next %}
+                  <li class="pager-next"><a href="?page={{ news.next_page_number }}">Next</a></li>
               {% endif %}
-              <li class="pager-next"><a href="?page={{ contacts.next_page_number }}">Newer</a></li>
           </ul>
       </nav>
 

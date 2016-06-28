@@ -101,13 +101,16 @@ def main_page(request):
     # news = []
     # for i in range(7,13):
     #     news.append(News.objects.get(pk=i))
-    context = {"news": news_list}
+    context = {"news": news_list, "paginator": paginator}
     return render(request, 'db/main_page.html', context)
 
 
 def news3_detail(request, news_id=0):
     news = get_object_or_404(News, pk=news_id)
-    emo = news.newstext.newsemotions.emo_weight
+    if news.newstext.is_emo_defined:
+        emo = news.newstext.newsemotions.emo_weight
+    else:
+        emo = 0
     context = {"news": news, "emo": emo}
     return render(request, 'db/news3.html', context)
 
@@ -122,10 +125,10 @@ def related_news_json(request, news_id=0):
     related_news = {
          "name": main_news.title,
           "children": [
-               {"name": "AgglomerativeCluster", "size": 100000},
-               {"name": "CommunityStructure", "size": 100000},
-               {"name": "HierarchicalCluster", "size": 100000},
-               {"name": "MergeEdge", "size": 100000}
+               {"name": "AgglomerativeCluster", "size": 10000},
+               {"name": "CommunityStructure", "size": 10000},
+               {"name": "HierarchicalCluster", "size": 10000},
+               {"name": "MergeEdge", "size": 10000}
                 ]
             }
     return JsonResponse(related_news)
@@ -158,7 +161,7 @@ def news_theme(request):
     for key, group in itertools.groupby(all_news, key=lambda x: str(x.pub_date.date())):
         dates.append(str(key))
         news_count_per_day.append(len(list(group)))
-        
+
     context = { 'news': news_list,
                 'news_count': news_count,
                 'news_dates': dates[:6],
