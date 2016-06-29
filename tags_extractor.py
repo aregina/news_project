@@ -14,12 +14,11 @@ def tags_create():
                     tag_from_db = AllTags.objects.get(tag=tag_text)
                 except AllTags.DoesNotExist:
                     tag_from_db = AllTags.objects.create(tag=tag_text)
-                print(weight, tag_from_db.tag)
                 NewsTags.objects.create(news=news_text, weight=weight, tag=tag_from_db)
 
         news_text.check_tag = True
         news_text.save()
-
+        print(news_text.news.pk)
 
 if __name__ == "__main__":
     tags_create()
