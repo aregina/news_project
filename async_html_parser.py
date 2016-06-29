@@ -108,7 +108,7 @@ def main():
     # HtmlParser().run()
     # NewsTextParser().run()
     # AsyncTextPreparer().run()
-    AsyncHtmlParser().run()
+    AsyncHtmlParser(7).run()
 
 
 if __name__ == "__main__":

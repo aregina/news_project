@@ -12,6 +12,7 @@ class MultiProc(object):
         self.task_queue = Queue()
         self.result_queue = Queue()
         self.process_number = process_number
+# TODO использовать cpu_count
 
     def __call__(self):
         self.run()
@@ -72,13 +73,17 @@ class MultiProc(object):
                     num = min(self.num_of_write_queue, self.result_queue.qsize())
                 else:
                     num = 10
-                #num = self.num_of_write_queue
+                # num = self.num_of_write_queue
                 for i in range(num):
                     try:
                         result = self.result_queue.get(timeout=0.1)
                     except Empty:
                         continue
-                    write_function(result)
+                    # TODO этот процесс должен всегда работать.
+                    try:
+                        write_function(result)
+                    except Exception as e:
+                        print(e)
 
     def run(self):
         self.__invoke_worker_process(self.worker)

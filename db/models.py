@@ -79,3 +79,4 @@ class NewsVector(models.Model):
         primary_key=True,
     )
     vector = models.BinaryField(null=True)
+    is_compared = models.BooleanField(default=False, db_index=True)
