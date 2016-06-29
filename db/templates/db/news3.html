@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+<head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -10,11 +10,12 @@
 
     <title>NewsGear</title>
 
-      <!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
+          integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
 
 
-     <style>
+    <style>
 
     .node circle {
       cursor: pointer;
@@ -34,93 +35,110 @@
       stroke-width: 5px;
     }
 
+
     </style>
-  </head>
+</head>
 
-  <body>
-    <nav class="navbar navbar-fixed-top navbar-inverse">
-      <div class="container">
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <a class="navbar-brand" href="/main">NewsGear</a>
-          <a class="navbar-brand" href="/news_theme">News Info</a>
-    </nav><!-- /.navbar -->
-
+<body>
+<nav class="navbar navbar-fixed-top navbar-inverse">
     <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
+                    aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/main">NewsGear</a>
+            <a class="navbar-brand" href="/news_theme">News Info</a>
+</nav><!-- /.navbar -->
 
-      <div class="row row-offcanvas row-offcanvas-right">
+<div class="container">
+
+    <div class="row row-offcanvas row-offcanvas-right">
 
         <div class="col-xs-12 col-sm-12">
-          <p class="pull-right visible-xs">
-            <button type="button" class="btn btn-primary btn-xs" data-toggle="offcanvas">Toggle nav</button>
-          </p>
-          <div class="jumbotron">
-            <div class="row">
-                <div class="col-md-11"><h1>{{ news.title }}</h1></div>
-                {% if emo > 0.5 %}
+            <p class="pull-right visible-xs">
+                <button type="button" class="btn btn-primary btn-xs" data-toggle="offcanvas">Toggle nav</button>
+            </p>
+            <div class="jumbotron">
+                <div class="row">
+                    <div class="col-md-11"><h1>{{ news.title }}</h1></div>
+                    {% if emo > 0.5 %}
                     <div class="col-md-1 "><h3><span class="label label-success">Good</span></h3></div>
-                {% elif emo < 0.2%}
+                    {% elif emo < 0.2%}
                     <div class="col-md-1 "><h3><span class="label label-danger">Bad</span></h3></div>
-                {% else %}
+                    {% else %}
                     <div class="col-md-1 "><h3><span class="label label-warning">Normal</span></h3></div>
-                {% endif %}
-            </div>
-              <div class="row">
-                <div class="col-md-4"><p class="text-left"><a href={{ news.url }}>{{ news.site.name }}</a></p></div>
-                <div class="col-md-4">
-                    {% for tag in news.newstext.tags.all %}
-                        /{{ tag.tag }}
-                    {% endfor %}/
+                    {% endif %}
                 </div>
-{#                <div class="col-md-4 col-md-offset-4">.col-md-4 .col-md-offset-4</div>#}
-                <div class="col-md-4"><p class="text-right">{{ news.pub_date| date }}</p></div>
+                <div class="row">
+                    <div class="col-md-4"><p class="text-left"><a href={{ news.url }}>{{ news.site.name }}</a></p></div>
+                    <div class="col-md-4">
+                        <h2>
+                            {% for tag in news.newstext.tags.all %}
+                            /{{ tag.tag }}
+                            {% endfor %}/
+                        </h2>
+                    </div>
+                    {#
+                    <div class="col-md-4 col-md-offset-4">.col-md-4 .col-md-offset-4</div>
+                    #}
+                    <div class="col-md-4"><p class="text-right">{{ news.pub_date| date }}</p></div>
+                </div>
             </div>
-          </div>
-          </div><!--/row-->
-        </div><!--/.col-xs-12.col-sm-9-->
+        </div><!--/row-->
+    </div><!--/.col-xs-12.col-sm-9-->
 
-      </div><!--/row-->
-
-
-{#    <div class="row">#}
-{#        {% for tag in news.related_news.all %}#}
-{#            <div class="col-md-4">{{ tag.title }}</div>#}
-{#        {% endfor %}#}
-{#    </div><!--/row-->#}
-
-    <xz></xz>
-    <hr>
-
-      <footer>
-        <p>&copy; 2016 NewsGear</p>
-      </footer>
-
-    </div><!--/.container-->
+</div><!--/row-->
 
 
-    <!-- Bootstrap core JavaScript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
-{#    <script src="/static/offcanvas.js"></script>#}
-    <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
-    <script src="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
-    <script src="/static/db/jchart.js"></script>
-{#    <script>#}
+{#
+<div class="row">#}
+    {# {% for tag in news.related_news.all %}#}
+    {#
+    <div class="col-md-4">{{ tag.title }}</div>
+    #}
+    {# {% endfor %}#}
+    {#
+</div><!--/row-->#}
+
+<xz></xz>
+<hr>
+
+<footer>
+    <p>&copy; 2016 NewsGear</p>
+</footer>
+
+</div><!--/.container-->
+
+
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
+        integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS"
+        crossorigin="anonymous"></script>
+{#
+<script src="/static/offcanvas.js"></script>
+#}
+<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script src="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+<script src="/static/db/jchart.js"></script>
+{#
+<script>#}
 {#        $(document).ready(function() {#}
 {#            $("#bar_of_pies").jChart();#}
 {#        });#}
-{#    </script>#}
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/c3/0.4.11/c3.min.js"></script>
-    <script src="//d3js.org/d3.v3.min.js"></script>
-    <script>
+{#
+</script>
+#}
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/c3/0.4.11/c3.min.js"></script>
+<script src="//d3js.org/d3.v3.min.js"></script>
+<script>
         var width = 1500,
         height = 1000,
         root;
@@ -234,6 +252,7 @@
           return nodes;
         }
 
-    </script>
-  </body>
+
+</script>
+</body>
 </html>
