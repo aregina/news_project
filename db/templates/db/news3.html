@@ -64,8 +64,10 @@
                 <div class="col-md-11"><h1>{{ news.title }}</h1></div>
                 {% if emo > 0.5 %}
                     <div class="col-md-1 "><h3><span class="label label-success">Good</span></h3></div>
-                {% else %}
+                {% elif emo < 0.2%}
                     <div class="col-md-1 "><h3><span class="label label-danger">Bad</span></h3></div>
+                {% else %}
+                    <div class="col-md-1 "><h3><span class="label label-warning">Normal</span></h3></div>
                 {% endif %}
             </div>
               <div class="row">

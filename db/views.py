@@ -151,10 +151,12 @@ def news_theme(request):
         current_site_info.append(news_per_site*100//news_count)
         sites_info.append(current_site_info)
 
-    emotions = [['Позитивные'], ['Негативные']]
+    emotions = [['Позитивные'], ['Негативные'], ['Нейтральные']]
     good_news_pers = (all_news.filter(newstext__newsemotions__emo_weight__gte=0.5).count()/news_count)*100
+    normal_news_pers = (all_news.filter(newstext__newsemotions__emo_weight__lte=0.2).count()/news_count)*100
     emotions[0].append(good_news_pers)
-    emotions[1].append(100 - good_news_pers)
+    emotions[1].append(100 - good_news_pers - normal_news_pers)
+    emotions[2].append(normal_news_pers)
 
     first_char_in_dates = ['x']
     dates = []
