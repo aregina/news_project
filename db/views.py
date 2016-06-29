@@ -156,16 +156,21 @@ def news_theme(request):
     emotions[0].append(good_news_pers)
     emotions[1].append(100 - good_news_pers)
 
-    dates = ['x']
-    news_count_per_day = ['Количество новостей за последние дни']
+    first_char_in_dates = ['x']
+    dates = []
+    news_count_per_day_1 = ['Количество новостей за последние дни']
+    news_count_per_day = []
     for key, group in itertools.groupby(all_news, key=lambda x: str(x.pub_date.date())):
         dates.append(str(key))
         news_count_per_day.append(len(list(group)))
 
+    full_dates = first_char_in_dates + dates[-6:]
+    news_count_per_day_full = news_count_per_day_1 + news_count_per_day[-6:]
+
     context = { 'news': news_list,
                 'news_count': news_count,
-                'news_dates': dates[:6],
-                'news_count_per_day': news_count_per_day[:6],
+                'news_dates': full_dates,
+                'news_count_per_day': news_count_per_day_full,
                 'sites_info': sites_info,
                 'emotions': emotions,
                 }
