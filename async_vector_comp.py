@@ -5,7 +5,7 @@ import pickle
 
 
 class NewsComparer(multiproc.MultiProc):
-    task_manager = NewsVector.objects.filter(is_compared=False)[:30].iterator
+    task_manager = NewsVector.objects.filter(is_compared=False).iterator
 
     @staticmethod
     def worker(parse_obj):
