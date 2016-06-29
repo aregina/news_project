@@ -162,9 +162,19 @@ def news_theme(request):
     dates = []
     news_count_per_day_1 = ['Количество новостей за последние дни']
     news_count_per_day = []
-    for key, group in itertools.groupby(all_news, key=lambda x: str(x.pub_date.date())):
-        dates.append(str(key))
-        news_count_per_day.append(len(list(group)))
+    # for key, group in itertools.groupby(all_news, key=lambda x: str(x.pub_date.date())):
+    #     dates.append(str(key))
+    #     news_count_per_day.append(len(list(group)))
+
+    from django.db.models import Count
+    news = News.objects \
+        .extra({'y': 'date(pub_date)'}) \
+        .values('y') \
+        .annotate(cnt=Count('pub_date')) \
+
+    for n in news:
+        dates.append(str(n.y))
+        news_count_per_day.append(n.cnt)
 
     full_dates = first_char_in_dates + dates[-6:]
     news_count_per_day_full = news_count_per_day_1 + news_count_per_day[-6:]
