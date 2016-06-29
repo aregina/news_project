@@ -14,14 +14,16 @@ class NewsComparer(multiproc.MultiProc):
             return
         pivot_news_arr = pivot_news_vector.toarray()[0]
         #simil_list = list()
+        sm_list = list()
         for vec in NewsVector.objects.filter(pk__lt=parse_obj.pk):
             vector = pickle.loads(vec.vector)
             text_similarity = vectorizer.compare_news_vector_with_(pivot_news_arr, vector)[0]
             if text_similarity < 0.71:
-                parse_obj.news.related_news.add(vec.news)
-                #simil_list.append(vec)
-            #simil_list.append(parse_obj)
-            parse_obj.news.related_news.add(parse_obj.news)
+                #parse_obj.news.related_news.add(vec.news)
+                sm_list.append(vec.news)
+            sm_list.append(parse_obj.news)
+            #parse_obj.news.related_news.add(parse_obj.news)
+        parse_obj.news.related_news = sm_list
         return parse_obj
 
     @staticmethod
