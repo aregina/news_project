@@ -173,8 +173,8 @@ def news_theme(request):
         .annotate(cnt=Count('pub_date')) \
 
     for n in news:
-        dates.append(str(n.y))
-        news_count_per_day.append(n.cnt)
+        dates.append(str(n['y'].strftime("%Y-%m-%d")))
+        news_count_per_day.append(n['cnt'])
 
     full_dates = first_char_in_dates + dates[-6:]
     news_count_per_day_full = news_count_per_day_1 + news_count_per_day[-6:]
