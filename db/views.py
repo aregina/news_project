@@ -116,21 +116,21 @@ def news3_detail(request, news_id=0):
 
 
 def related_news_json(request, news_id=0):
-    # main_news = get_object_or_404(News, pk=news_id)
-    # related_news = {"name": main_news.title, "children": []}
-    # for news in main_news.related_news:
-    #     related_news_info = {"name": news.title, "size": 6714}
-    #     related_news["children"].append(related_news_info)
     main_news = get_object_or_404(News, pk=news_id)
-    related_news = {
-         "name": main_news.title,
-          "children": [
-               {"name": "AgglomerativeCluster", "size": 10000},
-               {"name": "CommunityStructure", "size": 10000},
-               {"name": "HierarchicalCluster", "size": 10000},
-               {"name": "MergeEdge", "size": 10000}
-                ]
-            }
+    related_news = {"name": main_news.title, "children": []}
+    for news in main_news.related_news:
+        related_news_info = {"name": news.title, "size": 6714}
+        related_news["children"].append(related_news_info)
+    # main_news = get_object_or_404(News, pk=news_id)
+    # related_news = {
+    #      "name": main_news.title,
+    #       "children": [
+    #            {"name": "AgglomerativeCluster", "size": 10000},
+    #            {"name": "CommunityStructure", "size": 10000},
+    #            {"name": "HierarchicalCluster", "size": 10000},
+    #            {"name": "MergeEdge", "size": 10000}
+    #             ]
+    #         }
     return JsonResponse(related_news)
 
 
