@@ -164,8 +164,8 @@
 
           var nodeEnter = node.enter().append("g")
               .attr("class", "node")
-{#              .on("click", click)#}
-{#              .call(force.drag);#}
+              .on("click", click)
+              .call(force.drag);
 
           nodeEnter.append("circle")
                 .attr("r", function(d) { return 50; });
@@ -227,16 +227,6 @@
           return nodes;
         }
 
-              d3.select("body").append("svg")
-          .attr("width", 960)
-          .attr("height", 500)
-        .append("a")
-          .attr("xlink:href", "http://www.google.com")
-        .append("rect")
-          .attr("x", 280)
-          .attr("y", 50)
-          .attr("width", 400)
-          .attr("height", 400);
     </script>
   </body>
 </html>
