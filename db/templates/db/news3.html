@@ -70,7 +70,11 @@
             </div>
               <div class="row">
                 <div class="col-md-4"><p class="text-left"><a href={{ news.url }}>{{ news.site.name }}</a></p></div>
-                <div class="col-md-4">{{ news.newstext.newstags.all | join:" / "  }}</div>
+                <div class="col-md-4">
+                    {% for tag in news.newstext.tags.all %}
+                        /{{ tag.tag }}
+                    {% endfor %}/
+                </div>
 {#                <div class="col-md-4 col-md-offset-4">.col-md-4 .col-md-offset-4</div>#}
                 <div class="col-md-4"><p class="text-right">{{ news.pub_date| date }}</p></div>
             </div>
